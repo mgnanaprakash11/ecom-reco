@@ -1,0 +1,23 @@
+{
+  "name": "@repo/tasks",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "main": "src/index.ts",
+  "exports": {
+    ".": "./src/index.ts",
+    "./*": "./src/*.ts"
+  },
+  "scripts": {
+    "dev": "pnpm dlx trigger.dev@latest dev",
+    "check-types": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@trigger.dev/sdk": "^4.0.0"
+  },
+  "devDependencies": {
+    "@repo/typescript-config": "workspace:*",
+    "@types/node": "^22.15.3",
+    "typescript": "5.9.2"
+  }
+}
