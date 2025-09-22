@@ -1,42 +1,37 @@
 # Repository Guidelines
 
 ## Project Structure & Module Organization
-- `apps/web-app`: Next.js app (port 3000). API example: `app/api/hello-world/route.ts`.
-- `apps/docs`: Next.js docs app (port 3001).
-- `packages/ui`: Shared React UI components.
-- `packages/eslint-config`, `packages/typescript-config`: Workspace lint/TS presets.
-- `packages/tasks`: Trigger.dev V4 tasks. Tasks live in `src/trigger/*` and are exported via `src/trigger/index.ts` and `src/index.ts`.
-- `trigger.config.ts`: Trigger.dev config (project ref, task dirs, retries, `maxDuration`).
+- `apps/web-app`: Next.js storefront served on port 3000; primary APIs live under `app/api/*` (try `app/api/hello-world/route.ts`).
+- `apps/docs`: Next.js docs portal on port 3001; mirrors UI patterns for reference content.
+- `packages/ui`: Shared React component library consumed by both apps; update stories and props here first.
+- `packages/tasks`: Trigger.dev v4 tasks stored in `src/trigger/*` and re-exported through `src/trigger/index.ts` and `src/index.ts`.
+- `packages/eslint-config` & `packages/typescript-config`: Workspace presets; update once, consume via `extends` in each project.
+- Roots like `trigger.config.ts`, `turbo.json`, and `pnpm-workspace.yaml` orchestrate build pipelines and task registration.
 
 ## Build, Test, and Development Commands
-- Root dev (all apps): `pnpm dev`
-- Web only: `pnpm --filter web-app dev`
-- Build all: `pnpm build`
-- Lint all: `pnpm lint`
-- Type check all: `pnpm check-types`
-- Trigger.dev dev server: `pnpm run dev:triggers` (registers tasks, streams runs)
-- Example: visit `http://localhost:3000/api/hello-world` while the dev server runs to trigger `hello-world`.
+- `pnpm install`: Sync workspace deps (Node 18+, pnpm 9 required).
+- `pnpm dev`: Start all apps via Turborepo; visit `http://localhost:3000` for the web app.
+- `pnpm --filter web-app dev`: Focus development on the storefront only.
+- `pnpm build`: Production build for every package and app.
+- `pnpm lint` + `pnpm check-types`: Must pass before opening a PR.
+- `pnpm run dev:triggers`: Launch Trigger.dev listener; hitting `/api/hello-world` streams a sample run.
 
 ## Coding Style & Naming Conventions
-- TypeScript, strict mode. Prettier 3 for formatting; run `pnpm format` before PRs.
-- ESLint workspace presets in `packages/eslint-config` (no warnings allowed in CI).
-- Module resolution: NodeNext/Bundler. For NodeNext packages (e.g., `packages/tasks`), use explicit `.js` extensions in relative imports inside `.ts` files (example: `export * from "./trigger/index.js"`).
-- File names: kebab-case for files, PascalCase for React components, camelCase for variables/functions.
+- TypeScript in strict mode; prefer ES modules with explicit `.js` extensions for NodeNext packages (e.g., `export * from "./trigger/index.js"`).
+- Format with Prettier 3 (`pnpm format`) and respect workspace ESLint configuration (no warnings permitted).
+- Naming: kebab-case for files, PascalCase for React components, camelCase for variables and functions.
 
 ## Testing Guidelines
-- No test framework configured yet. Prefer Vitest + React Testing Library.
-- Name tests `*.test.ts` or `*.test.tsx` colocated with sources.
-- Add a root `test` script and run via `pnpm test` when introduced.
+- No suite yet; prefer Vitest + React Testing Library when adding tests.
+- Co-locate specs as `*.test.ts` or `*.test.tsx` near the source; mock external services conservatively.
+- Add a root `pnpm test` script when the first tests land and include it in CI.
 
 ## Commit & Pull Request Guidelines
-- Follow Conventional Commits (examples in history: `feat(create-turbo): ...`).
-- Keep PRs small and focused; include:
-  - Summary, rationale, and scope of change
-  - Screenshots for UI changes
-  - How to validate (commands/URLs)
-- PR must pass `pnpm lint` and `pnpm check-types`.
+- Follow Conventional Commits (`feat:`, `fix:`, `chore:`); reference scope when touching a specific package (e.g., `feat(tasks): ...`).
+- PRs must describe rationale, implementation notes, validation steps, and include screenshots for UI changes.
+- Link issues when available and confirm `pnpm lint` and `pnpm check-types` locally before pushing.
 
 ## Security & Configuration Tips
-- Do not commit secrets. Configure env locally; Trigger.dev auth happens via CLI.
-- `trigger.config.ts` requires: `project`, `dirs`, and `maxDuration` (>= 5s). Avoid importing heavy libraries in this file to keep builds fast.
-- Node >= 18 and pnpm 9 are required.
+- Never commit secrets; rely on local `.env` files and Trigger.dev CLI auth.
+- Keep `trigger.config.ts` lightweight: declare `project`, `dirs`, `maxDuration >= 5s`, and avoid heavy imports.
+- Rotate API keys promptly and document setup steps in the docs app when onboarding new contributors.
