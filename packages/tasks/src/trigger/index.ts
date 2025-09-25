@@ -1,1 +1,2 @@
-export { helloWorldTask } from "./example.js";
+export { helloWorldTask } from "./example.ts";
+export { processOrdersUploadTask } from "./orders-upload.ts";

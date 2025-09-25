@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["../../../../../../../../../../packages/tasks/src/trigger/index.ts"],
+  "sourcesContent": ["export { helloWorldTask } from \"./example.ts\";\nexport { processOrdersUploadTask } from \"./orders-upload.ts\";\n"],
+  "mappings": ";;;;;;;;;;;;;;AAAA;",
+  "names": []
+}

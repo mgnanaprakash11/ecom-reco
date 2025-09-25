@@ -1,135 +1,76 @@
-# Turborepo starter
+# Ecom Reco Monorepo
 
-This Turborepo starter is maintained by the Turborepo core team.
+This repository contains the full codebase for the multi-tenant Indian e-commerce reconciliation platform. It is a Turborepo-managed monorepo with Next.js storefronts, shared UI packages, and a Drizzle-based Postgres data layer purpose-built for order/payment reconciliation, fee modelling, and profitability analytics across marketplaces (Amazon, Flipkart, Myntra, Ajio, D2C gateways, etc.).
 
-## Using this example
-
-Run the following command:
-
-```sh
-npx create-turbo@latest
-```
-
-## What's inside?
-
-This Turborepo includes the following packages/apps:
-
-### Apps and Packages
-
-- `docs`: a [Next.js](https://nextjs.org/) app
-- `web-app`: a [Next.js](https://nextjs.org/) app
-- `@repo/ui`: a stub React component library shared by both `web-app` and `docs` applications
-- `@repo/eslint-config`: `eslint` configurations (includes `eslint-config-next` and `eslint-config-prettier`)
-- `@repo/typescript-config`: `tsconfig.json`s used throughout the monorepo
-
-Each package/app is 100% [TypeScript](https://www.typescriptlang.org/).
-
-### Utilities
-
-This Turborepo has some additional tools already setup for you:
-
-- [TypeScript](https://www.typescriptlang.org/) for static type checking
-- [ESLint](https://eslint.org/) for code linting
-- [Prettier](https://prettier.io) for code formatting
-
-### Build
-
-To build all apps and packages, run the following command:
+## Repository Structure
 
 ```
-cd my-turborepo
-
-# With [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation) installed (recommended)
-turbo build
-
-# Without [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation), use your package manager
-npx turbo build
-yarn dlx turbo build
-pnpm exec turbo build
+apps/
+  web-app/        # Next.js storefront + reconciliation UI
+  docs/           # Documentation site with shared UI patterns
+packages/
+  db/             # Drizzle ORM schema and database client
+  tasks/          # Trigger.dev tasks for automated workflows
+  ui/             # Shared component library
+  eslint-config/  # Workspace ESLint preset
+  typescript-config/ # Shared tsconfig bases
 ```
 
-You can build a specific package by using a [filter](https://turborepo.com/docs/crafting-your-repository/running-tasks#using-filters):
+Key configuration lives at the repo root (`pnpm-workspace.yaml`, `turbo.json`, `trigger.config.ts`).
 
-```
-# With [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation) installed (recommended)
-turbo build --filter=docs
+## Getting Started
 
-# Without [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation), use your package manager
-npx turbo build --filter=docs
-yarn exec turbo build --filter=docs
-pnpm exec turbo build --filter=docs
-```
+1. **Install dependencies**
+   ```sh
+   pnpm install
+   ```
+2. **Run everything in dev mode**
+   ```sh
+   pnpm dev        # spins up all apps via Turborepo
+   ```
+   Or focus on a single app:
+   ```sh
+   pnpm --filter web-app dev
+   ```
+3. **Database**
+   - Connection details are managed inside `packages/db` (see [packages/db/README.md](packages/db/README.md)).
+   - Generate migrations with `pnpm --filter db run generate` once you adjust the schema.
 
-### Develop
+4. **Quality gates**
+   ```sh
+   pnpm lint
+   pnpm check-types
+   ```
 
-To develop all apps and packages, run the following command:
+## Development Scripts
 
-```
-cd my-turborepo
+| Command | Description |
+|---------|-------------|
+| `pnpm dev` | Runs all apps with Turborepo dev server |
+| `pnpm build` | Builds every package and application |
+| `pnpm format` | Formats the codebase with Prettier |
+| `pnpm lint` | Runs ESLint using the shared config |
+| `pnpm check-types` | Performs strict TypeScript checks |
+| `pnpm run dev:triggers` | Starts Trigger.dev listener for task runs |
 
-# With [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation) installed (recommended)
-turbo dev
+## Database Schema Highlights
 
-# Without [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation), use your package manager
-npx turbo dev
-yarn exec turbo dev
-pnpm exec turbo dev
-```
+- Multi-tenant design with per-platform configuration, effective-dated charge rules, and upload provenance.
+- Comprehensive reconciliation domain tables covering orders, payments, settlements, statutory credits, logistics disputes, platform claims, and profitability snapshots.
+- Purpose-built enums for Indian marketplaces (TCS/TDS, COD fees, fulfilment channels, shipping zones, dispute states). 
 
-You can develop a specific package by using a [filter](https://turborepo.com/docs/crafting-your-repository/running-tasks#using-filters):
+For a detailed walk-through of every table and recommended workflows, read [packages/db/README.md](packages/db/README.md).
 
-```
-# With [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation) installed (recommended)
-turbo dev --filter=web
+## Contributing
 
-# Without [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation), use your package manager
-npx turbo dev --filter=web
-yarn exec turbo dev --filter=web
-pnpm exec turbo dev --filter=web
-```
+- Follow Conventional Commits (`feat:`, `fix:`, `chore:`, etc.). Use scopes like `feat(db): ...` when touching specific packages.
+- Always run `pnpm lint` and `pnpm check-types` before opening a PR.
+- For schema changes, generate Drizzle migrations (`pnpm --filter db run generate`) and document backfill steps in your PR description.
 
-### Remote Caching
+## Additional Resources
 
-> [!TIP]
-> Vercel Remote Cache is free for all plans. Get started today at [vercel.com](https://vercel.com/signup?/signup?utm_source=remote-cache-sdk&utm_campaign=free_remote_cache).
+- [Turborepo Documentation](https://turbo.build/repo/docs)
+- [Next.js Documentation](https://nextjs.org/docs)
+- [Drizzle ORM Documentation](https://orm.drizzle.team/)
 
-Turborepo can use a technique known as [Remote Caching](https://turborepo.com/docs/core-concepts/remote-caching) to share cache artifacts across machines, enabling you to share build caches with your team and CI/CD pipelines.
-
-By default, Turborepo will cache locally. To enable Remote Caching you will need an account with Vercel. If you don't have an account you can [create one](https://vercel.com/signup?utm_source=turborepo-examples), then enter the following commands:
-
-```
-cd my-turborepo
-
-# With [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation) installed (recommended)
-turbo login
-
-# Without [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation), use your package manager
-npx turbo login
-yarn exec turbo login
-pnpm exec turbo login
-```
-
-This will authenticate the Turborepo CLI with your [Vercel account](https://vercel.com/docs/concepts/personal-accounts/overview).
-
-Next, you can link your Turborepo to your Remote Cache by running the following command from the root of your Turborepo:
-
-```
-# With [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation) installed (recommended)
-turbo link
-
-# Without [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation), use your package manager
-npx turbo link
-yarn exec turbo link
-pnpm exec turbo link
-```
-
-## Useful Links
-
-Learn more about the power of Turborepo:
-
-- [Tasks](https://turborepo.com/docs/crafting-your-repository/running-tasks)
-- [Caching](https://turborepo.com/docs/crafting-your-repository/caching)
-- [Remote Caching](https://turborepo.com/docs/core-concepts/remote-caching)
-- [Filtering](https://turborepo.com/docs/crafting-your-repository/running-tasks#using-filters)
-- [Configuration Options](https://turborepo.com/docs/reference/configuration)
-- [CLI Usage](https://turborepo.com/docs/reference/command-line-reference)
+Happy reconciling!

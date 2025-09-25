@@ -9,11 +9,16 @@
     "./*": "./src/*.ts"
   },
   "scripts": {
-    "dev": "pnpm dlx trigger.dev@latest dev",
+    "dev": "pnpm dlx trigger.dev@latest dev --config ../../trigger.config.ts",
     "check-types": "tsc --noEmit"
   },
   "dependencies": {
-    "@trigger.dev/sdk": "^4.0.0"
+    "@repo/db": "workspace:*",
+    "@supabase/supabase-js": "^2.57.4",
+    "@trigger.dev/sdk": "4.0.4",
+    "drizzle-orm": "0.44.5",
+    "pg": "^8.16.3",
+    "postgres": "^3.4.4"
   },
   "devDependencies": {
     "@repo/typescript-config": "workspace:*",

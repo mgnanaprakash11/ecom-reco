@@ -4,12 +4,34 @@ import { AuthButton } from "@/components/auth-button";
 import { ThemeSwitcher } from "@/components/theme-switcher";
 import { hasEnvVars } from "@/lib/utils";
 import Link from "next/link";
+import { redirect } from "next/navigation";
 
-export default function ProtectedLayout({
+import { createClient } from "@/lib/supabase/server";
+import { db } from "@repo/db";
+
+export default async function ProtectedLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) {
+    redirect("/auth/login");
+  }
+
+  const membership = await db.query.tenantMembers.findFirst({
+    columns: { tenantId: true },
+    where: (tenantMembers, { eq }) => eq(tenantMembers.userId, user.id),
+  });
+
+  if (!membership) {
+    redirect("/onboarding");
+  }
+
   return (
     <main className="min-h-screen flex flex-col items-center">
       <div className="flex-1 w-full flex flex-col gap-20 items-center">
