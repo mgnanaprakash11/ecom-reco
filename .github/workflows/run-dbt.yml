@@ -18,6 +18,10 @@ on:
       dispatched_at:
         description: ISO timestamp when Trigger.dev scheduled the run
         required: false
+      dry_run:
+        description: Set to true to skip dbt execution (smoke test)
+        required: false
+        default: "false"
 
 concurrency:
   group: dbt-${{ github.event.inputs.batch_id || github.run_id }}
@@ -63,7 +67,10 @@ jobs:
         id: determine_mode
         shell: bash
         run: |
-          if [[ -n "${DBT_HOST:-}" && -n "${DBT_PORT:-}" && -n "${DBT_DATABASE:-}" && -n "${DBT_USER:-}" && -n "${DBT_PASSWORD:-}" ]]; then
+          if [[ "${{ github.event.inputs.dry_run }}" == "true" ]]; then
+            echo "mode=dry" >> "$GITHUB_OUTPUT"
+            echo "Dry run was requested via workflow input."
+          elif [[ -n "${DBT_HOST:-}" && -n "${DBT_PORT:-}" && -n "${DBT_DATABASE:-}" && -n "${DBT_USER:-}" && -n "${DBT_PASSWORD:-}" ]]; then
             echo "mode=full" >> "$GITHUB_OUTPUT"
           else
             echo "mode=dry" >> "$GITHUB_OUTPUT"
@@ -93,19 +100,19 @@ jobs:
       - name: Install dbt dependencies
         if: steps.determine_mode.outputs.mode == 'full'
         run: |
-          if [ -f "dbt_project.yml" ]; then
-            dbt deps --project-dir .
+          if [ -f "data/dbt/dbt_project.yml" ]; then
+            dbt deps --project-dir data/dbt
           fi
 
       - name: Run dbt models for raw orders
         if: steps.determine_mode.outputs.mode == 'full'
         run: |
-          dbt run --project-dir . --profiles-dir "$DBT_PROFILES_DIR" --target ${DBT_TARGET} --select raw_orders+
+          dbt run --project-dir data/dbt --profiles-dir "$DBT_PROFILES_DIR" --target ${DBT_TARGET} --select raw_orders+
 
       - name: Run dbt tests for raw orders
         if: success() && steps.determine_mode.outputs.mode == 'full'
         run: |
-          dbt test --project-dir . --profiles-dir "$DBT_PROFILES_DIR" --target ${DBT_TARGET} --select raw_orders+
+          dbt test --project-dir data/dbt --profiles-dir "$DBT_PROFILES_DIR" --target ${DBT_TARGET} --select raw_orders+
 
       - name: Dry run placeholder
         if: steps.determine_mode.outputs.mode == 'dry'
