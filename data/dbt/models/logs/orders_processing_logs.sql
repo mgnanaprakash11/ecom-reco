@@ -57,4 +57,5 @@ select
   current_timestamp as processed_at,
   '{{ invocation_id }}'::text as dbt_invocation_id,
   'dbt-placeholder'::text as triggered_by
+from (select 1) as _placeholder
 where not exists (select 1 from combined);
