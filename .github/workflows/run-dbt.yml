@@ -81,7 +81,7 @@ jobs:
         if: steps.determine_mode.outputs.mode == 'full'
         run: |
           mkdir -p "$DBT_PROFILES_DIR"
-          cat <<'EOF' > "$DBT_PROFILES_DIR/profiles.yml"
+          cat <<EOF > "$DBT_PROFILES_DIR/profiles.yml"
           ecom_reco:
             target: ${DBT_TARGET}
             outputs:
