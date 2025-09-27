@@ -1,0 +1,124 @@
+name: Run dbt Orders Pipeline
+
+on:
+  workflow_dispatch:
+    inputs:
+      batch_id:
+        description: ID of the upload batch to process
+        required: true
+      tenant_id:
+        description: Tenant identifier for the run context
+        required: true
+      file_name:
+        description: Original file name (for logging)
+        required: false
+      row_count:
+        description: Row count loaded into raw.orders
+        required: false
+      dispatched_at:
+        description: ISO timestamp when Trigger.dev scheduled the run
+        required: false
+
+concurrency:
+  group: dbt-${{ github.event.inputs.batch_id || github.run_id }}
+  cancel-in-progress: false
+
+jobs:
+  run-dbt:
+    name: Run dbt models
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      DBT_PROFILES_DIR: ${{ github.workspace }}/.github/dbt
+      DBT_TARGET: production
+      DATA_UPLOAD_BATCH_ID: ${{ github.event.inputs.batch_id }}
+      DATA_UPLOAD_TENANT_ID: ${{ github.event.inputs.tenant_id }}
+      DATA_UPLOAD_FILE_NAME: ${{ github.event.inputs.file_name }}
+      DATA_UPLOAD_ROW_COUNT: ${{ github.event.inputs.row_count }}
+      DATA_UPLOAD_DISPATCHED_AT: ${{ github.event.inputs.dispatched_at }}
+      # Required secrets (configure in repository settings)
+      DBT_HOST: ${{ secrets.DBT_HOST }}
+      DBT_PORT: ${{ secrets.DBT_PORT }}
+      DBT_DATABASE: ${{ secrets.DBT_DATABASE }}
+      DBT_USER: ${{ secrets.DBT_USER }}
+      DBT_PASSWORD: ${{ secrets.DBT_PASSWORD }}
+      DBT_SCHEMA: ${{ secrets.DBT_SCHEMA }}
+      SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+      DATABASE_URL: ${{ secrets.DATABASE_URL }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dbt
+        run: |
+          python -m pip install --upgrade pip
+          pip install "dbt-core>=1.8,<1.9" "dbt-postgres>=1.8,<1.9"
+
+      - name: Determine execution mode
+        id: determine_mode
+        shell: bash
+        run: |
+          if [[ -n "${DBT_HOST:-}" && -n "${DBT_PORT:-}" && -n "${DBT_DATABASE:-}" && -n "${DBT_USER:-}" && -n "${DBT_PASSWORD:-}" ]]; then
+            echo "mode=full" >> "$GITHUB_OUTPUT"
+          else
+            echo "mode=dry" >> "$GITHUB_OUTPUT"
+            echo "Required DBT connection secrets missing; running in dry-run mode."
+          fi
+
+      - name: Generate dbt profile
+        if: steps.determine_mode.outputs.mode == 'full'
+        run: |
+          mkdir -p "$DBT_PROFILES_DIR"
+          cat <<'EOF' > "$DBT_PROFILES_DIR/profiles.yml"
+          ecom_reco:
+            target: ${DBT_TARGET}
+            outputs:
+              ${DBT_TARGET}:
+                type: postgres
+                host: ${DBT_HOST}
+                port: ${DBT_PORT}
+                user: ${DBT_USER}
+                password: ${DBT_PASSWORD}
+                dbname: ${DBT_DATABASE}
+                schema: ${DBT_SCHEMA}
+                threads: 4
+                keepalives_idle: 0
+          EOF
+
+      - name: Install dbt dependencies
+        if: steps.determine_mode.outputs.mode == 'full'
+        run: |
+          if [ -f "dbt_project.yml" ]; then
+            dbt deps --project-dir .
+          fi
+
+      - name: Run dbt models for raw orders
+        if: steps.determine_mode.outputs.mode == 'full'
+        run: |
+          dbt run --project-dir . --profiles-dir "$DBT_PROFILES_DIR" --target ${DBT_TARGET} --select raw_orders+
+
+      - name: Run dbt tests for raw orders
+        if: success() && steps.determine_mode.outputs.mode == 'full'
+        run: |
+          dbt test --project-dir . --profiles-dir "$DBT_PROFILES_DIR" --target ${DBT_TARGET} --select raw_orders+
+
+      - name: Dry run placeholder
+        if: steps.determine_mode.outputs.mode == 'dry'
+        run: |
+          echo "dbt dry run: validating workflow wiring"
+          dbt --version
+
+      - name: Summarize run context
+        if: always()
+        run: |
+          echo "Batch ID: ${DATA_UPLOAD_BATCH_ID}" >> $GITHUB_STEP_SUMMARY
+          echo "Tenant ID: ${DATA_UPLOAD_TENANT_ID}" >> $GITHUB_STEP_SUMMARY
+          echo "Rows Loaded: ${DATA_UPLOAD_ROW_COUNT}" >> $GITHUB_STEP_SUMMARY
+          echo "File Name: ${DATA_UPLOAD_FILE_NAME}" >> $GITHUB_STEP_SUMMARY
+          echo "Trigger Timestamp: ${DATA_UPLOAD_DISPATCHED_AT}" >> $GITHUB_STEP_SUMMARY
+          echo "Execution Mode: ${{ steps.determine_mode.outputs.mode }}" >> $GITHUB_STEP_SUMMARY

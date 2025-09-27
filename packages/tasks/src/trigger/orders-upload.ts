@@ -6,6 +6,13 @@ import postgres from "postgres";
 
 import { dataUploadBatches, rawOrders } from "@repo/db/schema";
 
+const GITHUB_API_URL = process.env.GITHUB_API_URL ?? "https://api.github.com";
+const GITHUB_REPOSITORY = process.env.GITHUB_REPOSITORY;
+const GITHUB_WORKFLOW = process.env.GITHUB_DBT_WORKFLOW ?? "run-dbt.yml";
+const GITHUB_WORKFLOW_REF =
+  process.env.GITHUB_DBT_WORKFLOW_REF ?? process.env.GITHUB_REF ?? "main";
+const GITHUB_TOKEN = process.env.GITHUB_ACTIONS_TOKEN ?? process.env.GITHUB_TOKEN;
+
 const CHUNK_SIZE = 500;
 
 function getDb() {
@@ -39,6 +46,81 @@ function chunkArray<T>(items: T[], size: number): T[][] {
     chunks.push(items.slice(i, i + size));
   }
   return chunks;
+}
+
+type GithubWorkflowDispatchInput = {
+  tenantId: string;
+  dataUploadBatchId: string;
+  fileName: string;
+  rowCount: number;
+};
+
+type GithubWorkflowMetadata = {
+  repository: string;
+  workflow: string;
+  ref: string;
+  dispatchedAt: string;
+  inputs: Record<string, string>;
+};
+
+function assertGithubConfig() {
+  if (!GITHUB_REPOSITORY) {
+    throw new Error(
+      "GITHUB_REPOSITORY is required (format: owner/repo) to dispatch dbt workflow.",
+    );
+  }
+
+  if (!GITHUB_TOKEN) {
+    throw new Error(
+      "GITHUB_ACTIONS_TOKEN (or GITHUB_TOKEN) is required to call GitHub API.",
+    );
+  }
+}
+
+async function dispatchGithubWorkflow(
+  input: GithubWorkflowDispatchInput,
+): Promise<GithubWorkflowMetadata> {
+  assertGithubConfig();
+
+  const dispatchedAt = new Date().toISOString();
+  const inputs = {
+    batch_id: input.dataUploadBatchId,
+    tenant_id: input.tenantId,
+    file_name: input.fileName,
+    row_count: input.rowCount.toString(),
+    dispatched_at: dispatchedAt,
+  } satisfies Record<string, string>;
+
+  const url = `${GITHUB_API_URL}/repos/${GITHUB_REPOSITORY}/actions/workflows/${GITHUB_WORKFLOW}/dispatches`;
+
+  const response = await fetch(url, {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${GITHUB_TOKEN}`,
+      "Content-Type": "application/json",
+      "User-Agent": "ecom-reco-trigger-worker",
+      Accept: "application/vnd.github+json",
+    },
+    body: JSON.stringify({
+      ref: GITHUB_WORKFLOW_REF,
+      inputs,
+    }),
+  });
+
+  if (!response.ok) {
+    const errorText = await response.text();
+    throw new Error(
+      `GitHub workflow dispatch failed (${response.status} ${response.statusText}): ${errorText}`,
+    );
+  }
+
+  return {
+    repository: GITHUB_REPOSITORY!,
+    workflow: GITHUB_WORKFLOW,
+    ref: GITHUB_WORKFLOW_REF,
+    dispatchedAt,
+    inputs,
+  } satisfies GithubWorkflowMetadata;
 }
 
 function parseCsv(text: string): string[][] {
@@ -183,6 +265,39 @@ export const processOrdersUploadTask = task({
           updatedAt: finishedAt,
         })
         .where(eq(dataUploadBatches.id, payload.dataUploadBatchId));
+
+      try {
+        const workflowUpdatedAt = new Date();
+        const workflowMeta = await dispatchGithubWorkflow({
+          tenantId: payload.tenantId,
+          dataUploadBatchId: payload.dataUploadBatchId,
+          fileName: payload.fileName,
+          rowCount: rows.length,
+        });
+
+        await db
+          .update(dataUploadBatches)
+          .set({
+            status: "processing",
+            metadata: {
+              githubWorkflow: workflowMeta,
+            },
+            updatedAt: workflowUpdatedAt,
+          })
+          .where(eq(dataUploadBatches.id, payload.dataUploadBatchId));
+      } catch (error) {
+        const message =
+          error instanceof Error && error.message
+            ? error.message
+            : "Failed to dispatch GitHub workflow.";
+
+        await db
+          .update(dataUploadBatches)
+          .set({ status: "failed", notes: message, updatedAt: new Date() })
+          .where(eq(dataUploadBatches.id, payload.dataUploadBatchId));
+
+        throw error;
+      }
 
       return {
         rowsInserted: rows.length,

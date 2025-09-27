@@ -1,35 +1,39 @@
 # Repository Guidelines
 
 ## Project Structure & Module Organization
-- `apps/web-app`: customer storefront (Next.js) with API routes under `app/api/*`; see `app/api/hello-world/route.ts` for Trigger.dev patterns.
-- `apps/docs`: documentation surface (Next.js) used for onboarding and contributor notes.
-- `packages/ui`: shared component library with colocated stories; keep exports tidy and reusable.
-- `packages/tasks`: Trigger.dev jobs in `src/trigger/*`, re-exported via `src/index.ts` for discovery.
-- Workspace config lives in `packages/eslint-config`, `packages/typescript-config`, `turbo.json`, and `pnpm-workspace.yaml`.
+- `apps/web-app`: Next.js storefront (port 3000). `app/upload` hosts the CSV ingestion UI and server actions.
+- `apps/docs`: Contributor knowledge base (port 3001).
+- `packages/tasks`: Trigger.dev worker tasks inside `src/trigger`; orchestrates CSV parsing and downstream automation.
+- `packages/db`: Drizzle schema (`src/schema`), migrations (`drizzle/`), and typed client exports.
+- Shared utilities: `packages/ui`, `packages/supabase`, `packages/typescript-config`, and `packages/eslint-config`.
 
-## Build, Test, and Development Commands
-- `pnpm install`: hydrate dependencies (Node 18+, pnpm 9).
-- `pnpm dev`: run both apps; use `pnpm --filter web-app dev` or `pnpm --filter docs dev` for focused work.
-- `pnpm build`: generate production bundles.
-- `pnpm lint` / `pnpm check-types`: enforce ESLint + TypeScript gates before commits.
-- `pnpm run dev:triggers`: stream Trigger.dev jobs against `/api/hello-world` while iterating on workflows.
+## Build, Test & Development Commands
+- `pnpm install`: bootstrap workspace (Node 18+, pnpm 9).
+- `pnpm dev`: launch both apps; scope with `pnpm --filter web-app dev` or `pnpm --filter docs dev`.
+- `pnpm --filter @repo/tasks dev`: start the Trigger.dev worker (needs `DATABASE_URL`, `SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`).
+- `pnpm lint`, `pnpm check-types`, `pnpm build`, and `pnpm format`: required gates before pushing.
+- Database migrations: `pnpm --filter @repo/db run generate` then `run push` to sync Postgres.
 
 ## Coding Style & Naming Conventions
-- TypeScript strict mode with ESM; use kebab-case for files, PascalCase components, camelCase functions/variables.
-- Format via Prettier 3 (`pnpm format`); treat any ESLint warning as a failure.
-- Keep NodeNext exports explicit with `.js` endings; prefer concise, well-named React props.
+- TypeScript strict across packages; use ESM with explicit file extensions in NodeNext modules.
+- Naming: kebab-case files, PascalCase React components, camelCase variables/functions.
+- Format with Prettier 3 and keep Drizzle schema definitions deterministic for consistent diffs.
 
 ## Testing Guidelines
-- Use Vitest with React Testing Library; co-locate tests as `*.test.ts` or `*.test.tsx` beside sources.
-- Aim for meaningful component/task coverage; mock external services sparingly.
-- Run suites with the upcoming `pnpm test` (wire your additions the same way); document gaps in PRs.
+- Vitest + React Testing Library; co-locate specs as `*.test.ts(x)` beside source files.
+- Add coverage around `/upload` UI, parsing edge cases, and task status transitions. Integrate suites into the future root `pnpm test` runner.
+
+## Automation & dbt Integration
+- `process-orders-upload` loads CSV rows into `raw.orders` then dispatches `.github/workflows/run-dbt.yml` via GitHub Actions.
+- Worker environment: `GITHUB_REPOSITORY`, `GITHUB_ACTIONS_TOKEN`, optional `GITHUB_DBT_WORKFLOW` and `GITHUB_DBT_WORKFLOW_REF`.
+- Repository secrets required by the workflow: `DBT_HOST`, `DBT_PORT`, `DBT_DATABASE`, `DBT_USER`, `DBT_PASSWORD`, `DBT_SCHEMA`, `DATABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`.
+- Monitor run status in GitHub Actions; successful dispatch updates `data_upload_batches.metadata.githubWorkflow`.
 
 ## Commit & Pull Request Guidelines
-- Follow Conventional Commits, e.g., `feat(tasks): schedule webhook` or `fix(ui): align button spacing`.
-- PRs should explain rationale, implementation details, and validation steps (`pnpm lint`, `pnpm check-types`, relevant screenshots).
-- Reference issues, note Trigger.dev impacts, and capture onboarding updates in `apps/docs` when workflows change.
+- Use Conventional Commits (e.g., `feat(tasks): trigger dbt workflow`, `fix(db): add raw orders migration`).
+- PRs must list rationale, implementation notes, validation commands (`pnpm lint`, `pnpm check-types`, pertinent tests), and screenshots/recordings for UI-facing changes.
 
 ## Security & Configuration Tips
-- Keep secrets in `.env.local` files; never commit credentials or Trigger.dev tokens.
-- Ensure `trigger.config.ts` lists correct `project`, job directories, and `maxDuration >= 5s`.
-- Document new setup requirements in `apps/docs` so future agents stay aligned.
+- Never commit secrets; use `.env.local` locally and repository secrets/Trigger.dev config in shared environments.
+- Confirm the Supabase `reco-uploads` bucket exists before testing uploads.
+- Replace schema edits with Drizzle migrations and keep Trigger.dev CLI authenticated (`pnpm dlx trigger.dev@latest login`).
