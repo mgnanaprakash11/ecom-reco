@@ -15,4 +15,6 @@ models:
       +schema: stg
     marts:
       +schema: marts
-
+    logs:
+      +schema: raw
+      +materialized: table

@@ -542,7 +542,10 @@ export const tenantChargeTiers = pgTable(
     id: uuid("id").defaultRandom().primaryKey(),
     chargeConfigId: uuid("charge_config_id")
       .notNull()
-      .references(() => tenantChargeConfigs.id, { onDelete: "cascade" }),
+      .references(() => tenantChargeConfigs.id, {
+        onDelete: "cascade",
+        name: "tenant_charge_tiers_charge_config_id_tenant_charge_configs_id_f",
+      }),
     tierMin: numeric("tier_min", { precision: 14, scale: 2 }),
     tierMax: numeric("tier_max", { precision: 14, scale: 2 }),
     rate: numeric("rate", { precision: 10, scale: 4 }),
@@ -715,10 +718,12 @@ export const orderChargeAllocations = pgTable(
     currency: varchar("currency", { length: 3 }).default("INR").notNull(),
     source: financialSourceEnum("source").default("calculated").notNull(),
     chargeConfigId: uuid("charge_config_id").references(
-      () => tenantChargeConfigs.id
+      () => tenantChargeConfigs.id,
+      { name: "order_charge_allocations_charge_config_id_tenant_charge_configs" }
     ),
     uploadBatchId: uuid("upload_batch_id").references(
-      () => dataUploadBatches.id
+      () => dataUploadBatches.id,
+      { name: "order_charge_allocations_upload_batch_id_data_upload_batches_id" }
     ),
     promotionSource: promotionSourceEnum("promotion_source"),
     notes: text("notes"),
@@ -745,7 +750,10 @@ export const orderReturns = pgTable(
     orderItemId: uuid("order_item_id").references(() => orderItems.id, {
       onDelete: "set null",
     }),
-    tenantPlatformId: uuid("tenant_platform_id").references(() => tenantPlatforms.id),
+    tenantPlatformId: uuid("tenant_platform_id").references(
+      () => tenantPlatforms.id,
+      { name: "profitability_snapshots_tenant_platform_id_tenant_platforms_id_" }
+    ),
     uploadBatchId: uuid("upload_batch_id").references(() => dataUploadBatches.id),
     paymentId: uuid("payment_id").references(() => payments.id, {
       onDelete: "set null",
@@ -959,7 +967,8 @@ export const reconciliationRuns = pgTable(
     tenantPlatformId: uuid("tenant_platform_id")
       .references(() => tenantPlatforms.id),
     dataUploadBatchId: uuid("data_upload_batch_id").references(
-      () => dataUploadBatches.id
+      () => dataUploadBatches.id,
+      { name: "reconciliation_runs_data_upload_batch_id_data_upload_batches_id" }
     ),
     triggeredBy: uuid("triggered_by").references(() => users.id),
     status: reconciliationStatusEnum("status").default("manual_review").notNull(),
@@ -1066,7 +1075,8 @@ export const profitabilitySnapshots = pgTable(
       onDelete: "set null",
     }),
     reconciliationRunId: uuid("reconciliation_run_id").references(
-      () => reconciliationRuns.id
+      () => reconciliationRuns.id,
+      { name: "profitability_snapshots_reconciliation_run_id_reconciliation_ru" }
     ),
     calculationSource: financialSourceEnum("calculation_source")
       .default("calculated")

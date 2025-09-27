@@ -1,5 +1,5 @@
 {
-  "id": "baee0c19-248c-4504-ac6a-6dea85b0847e",
+  "id": "e10547c1-646a-47b2-97fb-a19b8468492a",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -1175,8 +1175,8 @@
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
-        "order_charge_allocations_charge_config_id_tenant_charge_configs": {
-          "name": "order_charge_allocations_charge_config_id_tenant_charge_configs",
+        "order_charge_allocations_charge_config_id_tenant_charge_configs_id_fk": {
+          "name": "order_charge_allocations_charge_config_id_tenant_charge_configs_id_fk",
           "tableFrom": "order_charge_allocations",
           "tableTo": "tenant_charge_configs",
           "columnsFrom": [
@@ -1188,8 +1188,8 @@
           "onDelete": "no action",
           "onUpdate": "no action"
         },
-        "order_charge_allocations_upload_batch_id_data_upload_batches_id": {
-          "name": "order_charge_allocations_upload_batch_id_data_upload_batches_id",
+        "order_charge_allocations_upload_batch_id_data_upload_batches_id_fk": {
+          "name": "order_charge_allocations_upload_batch_id_data_upload_batches_id_fk",
           "tableFrom": "order_charge_allocations",
           "tableTo": "data_upload_batches",
           "columnsFrom": [
@@ -3636,8 +3636,8 @@
           "onDelete": "no action",
           "onUpdate": "no action"
         },
-        "profitability_snapshots_tenant_platform_id_tenant_platforms_id_": {
-          "name": "profitability_snapshots_tenant_platform_id_tenant_platforms_id_",
+        "profitability_snapshots_tenant_platform_id_tenant_platforms_id_fk": {
+          "name": "profitability_snapshots_tenant_platform_id_tenant_platforms_id_fk",
           "tableFrom": "profitability_snapshots",
           "tableTo": "tenant_platforms",
           "columnsFrom": [
@@ -3675,8 +3675,8 @@
           "onDelete": "set null",
           "onUpdate": "no action"
         },
-        "profitability_snapshots_reconciliation_run_id_reconciliation_ru": {
-          "name": "profitability_snapshots_reconciliation_run_id_reconciliation_ru",
+        "profitability_snapshots_reconciliation_run_id_reconciliation_runs_id_fk": {
+          "name": "profitability_snapshots_reconciliation_run_id_reconciliation_runs_id_fk",
           "tableFrom": "profitability_snapshots",
           "tableTo": "reconciliation_runs",
           "columnsFrom": [
@@ -4033,8 +4033,8 @@
           "onDelete": "no action",
           "onUpdate": "no action"
         },
-        "reconciliation_runs_data_upload_batch_id_data_upload_batches_id": {
-          "name": "reconciliation_runs_data_upload_batch_id_data_upload_batches_id",
+        "reconciliation_runs_data_upload_batch_id_data_upload_batches_id_fk": {
+          "name": "reconciliation_runs_data_upload_batch_id_data_upload_batches_id_fk",
           "tableFrom": "reconciliation_runs",
           "tableTo": "data_upload_batches",
           "columnsFrom": [
@@ -4799,8 +4799,8 @@
         }
       },
       "foreignKeys": {
-        "tenant_charge_tiers_charge_config_id_tenant_charge_configs_id_f": {
-          "name": "tenant_charge_tiers_charge_config_id_tenant_charge_configs_id_f",
+        "tenant_charge_tiers_charge_config_id_tenant_charge_configs_id_fk": {
+          "name": "tenant_charge_tiers_charge_config_id_tenant_charge_configs_id_fk",
           "tableFrom": "tenant_charge_tiers",
           "tableTo": "tenant_charge_configs",
           "columnsFrom": [
@@ -5317,189 +5317,6 @@
           "with": {}
         }
       },
-      "foreignKeys": {},
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {},
-      "policies": {},
-      "checkConstraints": {},
-      "isRLSEnabled": false
-    },
-    "raw.orders": {
-      "name": "orders",
-      "schema": "raw",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "uuid",
-          "primaryKey": true,
-          "notNull": true,
-          "default": "gen_random_uuid()"
-        },
-        "tenant_id": {
-          "name": "tenant_id",
-          "type": "uuid",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "data_upload_batch_id": {
-          "name": "data_upload_batch_id",
-          "type": "uuid",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "row_number": {
-          "name": "row_number",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "payload": {
-          "name": "payload",
-          "type": "jsonb",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "created_at": {
-          "name": "created_at",
-          "type": "timestamp with time zone",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
-        }
-      },
-      "indexes": {
-        "raw_orders_batch_row_idx": {
-          "name": "raw_orders_batch_row_idx",
-          "columns": [
-            {
-              "expression": "data_upload_batch_id",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            },
-            {
-              "expression": "row_number",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": false,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        }
-      },
-      "foreignKeys": {
-        "orders_tenant_id_tenants_id_fk": {
-          "name": "orders_tenant_id_tenants_id_fk",
-          "tableFrom": "orders",
-          "tableTo": "tenants",
-          "columnsFrom": [
-            "tenant_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
-        },
-        "orders_data_upload_batch_id_data_upload_batches_id_fk": {
-          "name": "orders_data_upload_batch_id_data_upload_batches_id_fk",
-          "tableFrom": "orders",
-          "tableTo": "data_upload_batches",
-          "columnsFrom": [
-            "data_upload_batch_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
-        }
-      },
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {},
-      "policies": {},
-      "checkConstraints": {},
-      "isRLSEnabled": false
-    },
-    "raw.orders_processing_logs": {
-      "name": "orders_processing_logs",
-      "schema": "raw",
-      "columns": {
-        "data_upload_batch_id": {
-          "name": "data_upload_batch_id",
-          "type": "uuid",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "tenant_id": {
-          "name": "tenant_id",
-          "type": "uuid",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "rows_loaded": {
-          "name": "rows_loaded",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": false,
-          "default": 0
-        },
-        "reported_row_count": {
-          "name": "reported_row_count",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": false,
-          "default": 0
-        },
-        "status": {
-          "name": "status",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false,
-          "default": "'loaded'"
-        },
-        "processing_started_at": {
-          "name": "processing_started_at",
-          "type": "timestamp with time zone",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "processing_completed_at": {
-          "name": "processing_completed_at",
-          "type": "timestamp with time zone",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "last_row_created_at": {
-          "name": "last_row_created_at",
-          "type": "timestamp with time zone",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "processed_at": {
-          "name": "processed_at",
-          "type": "timestamp with time zone",
-          "primaryKey": false,
-          "notNull": false,
-          "default": "now()"
-        },
-        "dbt_invocation_id": {
-          "name": "dbt_invocation_id",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "triggered_by": {
-          "name": "triggered_by",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
-        }
-      },
-      "indexes": {},
       "foreignKeys": {},
       "compositePrimaryKeys": {},
       "uniqueConstraints": {},

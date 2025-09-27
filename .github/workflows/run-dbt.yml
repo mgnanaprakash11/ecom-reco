@@ -104,15 +104,15 @@ jobs:
             dbt deps --project-dir data/dbt
           fi
 
-      - name: Run dbt models for raw orders
+      - name: Run dbt log model
         if: steps.determine_mode.outputs.mode == 'full'
         run: |
-          dbt run --project-dir data/dbt --profiles-dir "$DBT_PROFILES_DIR" --target ${DBT_TARGET} --select raw_orders+
+          dbt run --project-dir data/dbt --profiles-dir "$DBT_PROFILES_DIR" --target ${DBT_TARGET} --select orders_processing_logs
 
-      - name: Run dbt tests for raw orders
+      - name: Run dbt tests for log model
         if: success() && steps.determine_mode.outputs.mode == 'full'
         run: |
-          dbt test --project-dir data/dbt --profiles-dir "$DBT_PROFILES_DIR" --target ${DBT_TARGET} --select raw_orders+
+          dbt test --project-dir data/dbt --profiles-dir "$DBT_PROFILES_DIR" --target ${DBT_TARGET} --select orders_processing_logs
 
       - name: Dry run placeholder
         if: steps.determine_mode.outputs.mode == 'dry'

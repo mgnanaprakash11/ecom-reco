@@ -183,6 +183,12 @@ export const processOrdersUploadTask = task({
   run: async (payload: OrdersUploadPayload) => {
     const startedAt = new Date();
 
+    console.log("[process-orders-upload] starting", {
+      batchId: payload.dataUploadBatchId,
+      tenantId: payload.tenantId,
+      fileName: payload.fileName,
+    });
+
     const db = getDb();
 
     await db
@@ -256,6 +262,11 @@ export const processOrdersUploadTask = task({
 
       const finishedAt = new Date();
 
+      console.log("[process-orders-upload] csv parsed", {
+        batchId: payload.dataUploadBatchId,
+        rowsInserted: rows.length,
+      });
+
       await db
         .update(dataUploadBatches)
         .set({
@@ -274,6 +285,8 @@ export const processOrdersUploadTask = task({
           fileName: payload.fileName,
           rowCount: rows.length,
         });
+
+        console.log("[process-orders-upload] workflow dispatched", workflowMeta);
 
         await db
           .update(dataUploadBatches)
@@ -309,6 +322,12 @@ export const processOrdersUploadTask = task({
         error instanceof Error && error.message
           ? error.message
           : "Unhandled error while processing upload.";
+
+      console.error("[process-orders-upload] failed", {
+        batchId: payload.dataUploadBatchId,
+        tenantId: payload.tenantId,
+        error: message,
+      });
 
       await db
         .update(dataUploadBatches)

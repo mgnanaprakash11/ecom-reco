@@ -4,4 +4,8 @@ sources:
     schema: public
     tables:
       - name: products
-
+      - name: data_upload_batches
+  - name: raw
+    schema: raw
+    tables:
+      - name: orders

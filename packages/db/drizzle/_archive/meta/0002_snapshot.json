@@ -1,6 +1,6 @@
 {
-  "id": "baee0c19-248c-4504-ac6a-6dea85b0847e",
-  "prevId": "00000000-0000-0000-0000-000000000000",
+  "id": "85a8841d-5dd3-44c5-86b1-61a4ce645c3b",
+  "prevId": "e2728efb-84d5-4a35-93ed-d2284330b05f",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -1175,8 +1175,8 @@
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
-        "order_charge_allocations_charge_config_id_tenant_charge_configs": {
-          "name": "order_charge_allocations_charge_config_id_tenant_charge_configs",
+        "order_charge_allocations_charge_config_id_tenant_charge_configs_id_fk": {
+          "name": "order_charge_allocations_charge_config_id_tenant_charge_configs_id_fk",
           "tableFrom": "order_charge_allocations",
           "tableTo": "tenant_charge_configs",
           "columnsFrom": [
@@ -1188,8 +1188,8 @@
           "onDelete": "no action",
           "onUpdate": "no action"
         },
-        "order_charge_allocations_upload_batch_id_data_upload_batches_id": {
-          "name": "order_charge_allocations_upload_batch_id_data_upload_batches_id",
+        "order_charge_allocations_upload_batch_id_data_upload_batches_id_fk": {
+          "name": "order_charge_allocations_upload_batch_id_data_upload_batches_id_fk",
           "tableFrom": "order_charge_allocations",
           "tableTo": "data_upload_batches",
           "columnsFrom": [
@@ -3636,8 +3636,8 @@
           "onDelete": "no action",
           "onUpdate": "no action"
         },
-        "profitability_snapshots_tenant_platform_id_tenant_platforms_id_": {
-          "name": "profitability_snapshots_tenant_platform_id_tenant_platforms_id_",
+        "profitability_snapshots_tenant_platform_id_tenant_platforms_id_fk": {
+          "name": "profitability_snapshots_tenant_platform_id_tenant_platforms_id_fk",
           "tableFrom": "profitability_snapshots",
           "tableTo": "tenant_platforms",
           "columnsFrom": [
@@ -3675,8 +3675,8 @@
           "onDelete": "set null",
           "onUpdate": "no action"
         },
-        "profitability_snapshots_reconciliation_run_id_reconciliation_ru": {
-          "name": "profitability_snapshots_reconciliation_run_id_reconciliation_ru",
+        "profitability_snapshots_reconciliation_run_id_reconciliation_runs_id_fk": {
+          "name": "profitability_snapshots_reconciliation_run_id_reconciliation_runs_id_fk",
           "tableFrom": "profitability_snapshots",
           "tableTo": "reconciliation_runs",
           "columnsFrom": [
@@ -4033,8 +4033,8 @@
           "onDelete": "no action",
           "onUpdate": "no action"
         },
-        "reconciliation_runs_data_upload_batch_id_data_upload_batches_id": {
-          "name": "reconciliation_runs_data_upload_batch_id_data_upload_batches_id",
+        "reconciliation_runs_data_upload_batch_id_data_upload_batches_id_fk": {
+          "name": "reconciliation_runs_data_upload_batch_id_data_upload_batches_id_fk",
           "tableFrom": "reconciliation_runs",
           "tableTo": "data_upload_batches",
           "columnsFrom": [
@@ -4799,8 +4799,8 @@
         }
       },
       "foreignKeys": {
-        "tenant_charge_tiers_charge_config_id_tenant_charge_configs_id_f": {
-          "name": "tenant_charge_tiers_charge_config_id_tenant_charge_configs_id_f",
+        "tenant_charge_tiers_charge_config_id_tenant_charge_configs_id_fk": {
+          "name": "tenant_charge_tiers_charge_config_id_tenant_charge_configs_id_fk",
           "tableFrom": "tenant_charge_tiers",
           "tableTo": "tenant_charge_configs",
           "columnsFrom": [
