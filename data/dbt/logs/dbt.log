@@ -1,0 +1,40 @@
+[0m22:57:43.837682 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'start', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x10960ec70>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x10b83bbe0>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x10b83bdc0>]}
+
+
+============================== 22:57:43.841651 | 38d513dc-86a9-4896-b0f0-4dbb09c33f7f ==============================
+[0m22:57:43.841651 [info ] [MainThread]: Running with dbt=1.8.9
+[0m22:57:43.841928 [debug] [MainThread]: running dbt with arguments {'printer_width': '80', 'indirect_selection': 'eager', 'log_cache_events': 'False', 'write_json': 'True', 'partial_parse': 'True', 'cache_selected_only': 'False', 'warn_error': 'None', 'debug': 'False', 'fail_fast': 'False', 'log_path': '/Users/gnana/Dev/Projects/ecom-reco/data/dbt/logs', 'profiles_dir': '/Users/gnana/Dev/Projects/ecom-reco/data/dbt', 'version_check': 'True', 'use_colors': 'True', 'use_experimental_parser': 'False', 'no_print': 'None', 'quiet': 'False', 'empty': 'None', 'warn_error_options': 'WarnErrorOptions(include=[], exclude=[])', 'static_parser': 'True', 'log_format': 'default', 'introspect': 'True', 'target_path': 'None', 'invocation_command': 'dbt deps', 'send_anonymous_usage_stats': 'True'}
+[0m22:57:43.928607 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'project_id', 'label': '38d513dc-86a9-4896-b0f0-4dbb09c33f7f', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x10ac89040>]}
+[0m22:57:43.937182 [info ] [MainThread]: Warning: No packages were found in packages.yml
+[0m22:57:43.937567 [info ] [MainThread]: Warning: No packages were found in packages.yml
+[0m22:57:43.947304 [debug] [MainThread]: Resource report: {"command_name": "deps", "command_success": true, "command_wall_clock_time": 0.14617921, "process_in_blocks": "0", "process_kernel_time": 0.146216, "process_mem_max_rss": "107200512", "process_out_blocks": "0", "process_user_time": 0.772914}
+[0m22:57:43.947580 [debug] [MainThread]: Command `dbt deps` succeeded at 22:57:43.947532 after 0.15 seconds
+[0m22:57:43.947754 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'end', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x10960ec70>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x10b97bfa0>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x10b6bf250>]}
+[0m22:57:43.947920 [debug] [MainThread]: Flushing usage events
+[0m22:58:34.425552 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'start', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x10921c970>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x10b4b3490>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x10b4b32b0>]}
+
+
+============================== 22:58:34.427772 | c7f52a01-af3b-4527-a423-9322aee2efea ==============================
+[0m22:58:34.427772 [info ] [MainThread]: Running with dbt=1.8.9
+[0m22:58:34.428032 [debug] [MainThread]: running dbt with arguments {'printer_width': '80', 'indirect_selection': 'eager', 'write_json': 'True', 'log_cache_events': 'False', 'partial_parse': 'True', 'cache_selected_only': 'False', 'warn_error': 'None', 'debug': 'False', 'version_check': 'True', 'log_path': '/Users/gnana/Dev/Projects/ecom-reco/data/dbt/logs', 'profiles_dir': '/Users/gnana/Dev/Projects/ecom-reco/data/dbt', 'fail_fast': 'False', 'use_colors': 'True', 'use_experimental_parser': 'False', 'no_print': 'None', 'quiet': 'False', 'empty': 'False', 'log_format': 'default', 'static_parser': 'True', 'invocation_command': 'dbt run --select orders_processing_logs', 'introspect': 'True', 'target_path': 'None', 'warn_error_options': 'WarnErrorOptions(include=[], exclude=[])', 'send_anonymous_usage_stats': 'True'}
+[0m22:58:34.430296 [error] [MainThread]: Encountered an error:
+Parsing Error
+  Env var required but not provided: 'DBT_HOST'
+[0m22:58:34.431530 [debug] [MainThread]: Resource report: {"command_name": "run", "command_success": false, "command_wall_clock_time": 0.04172454, "process_in_blocks": "0", "process_kernel_time": 0.091237, "process_mem_max_rss": "101269504", "process_out_blocks": "0", "process_user_time": 0.639892}
+[0m22:58:34.431733 [debug] [MainThread]: Command `dbt run` failed at 22:58:34.431691 after 0.04 seconds
+[0m22:58:34.431878 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'end', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x10921c970>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x10b4b3dc0>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x10b4b3490>]}
+[0m22:58:34.432021 [debug] [MainThread]: Flushing usage events
+[0m22:59:30.514482 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'start', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x10b0bf970>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x10d357490>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x10d3572b0>]}
+
+
+============================== 22:59:30.516590 | b506a087-2683-46c4-b07b-c3af355f8015 ==============================
+[0m22:59:30.516590 [info ] [MainThread]: Running with dbt=1.8.9
+[0m22:59:30.516857 [debug] [MainThread]: running dbt with arguments {'printer_width': '80', 'indirect_selection': 'eager', 'log_cache_events': 'False', 'write_json': 'True', 'partial_parse': 'True', 'cache_selected_only': 'False', 'profiles_dir': '/Users/gnana/Dev/Projects/ecom-reco/data/dbt', 'fail_fast': 'False', 'debug': 'False', 'log_path': '/Users/gnana/Dev/Projects/ecom-reco/data/dbt/logs', 'version_check': 'True', 'warn_error': 'None', 'use_colors': 'True', 'use_experimental_parser': 'False', 'empty': 'False', 'quiet': 'False', 'no_print': 'None', 'log_format': 'default', 'static_parser': 'True', 'warn_error_options': 'WarnErrorOptions(include=[], exclude=[])', 'invocation_command': 'dbt run --select orders_processing_logs', 'target_path': 'None', 'introspect': 'True', 'send_anonymous_usage_stats': 'True'}
+[0m22:59:30.519113 [error] [MainThread]: Encountered an error:
+Parsing Error
+  Env var required but not provided: 'DBT_HOST'
+[0m22:59:30.520330 [debug] [MainThread]: Resource report: {"command_name": "run", "command_success": false, "command_wall_clock_time": 0.039184418, "process_in_blocks": "0", "process_kernel_time": 0.095748, "process_mem_max_rss": "101089280", "process_out_blocks": "0", "process_user_time": 0.649188}
+[0m22:59:30.520541 [debug] [MainThread]: Command `dbt run` failed at 22:59:30.520500 after 0.04 seconds
+[0m22:59:30.520698 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'end', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x10b0bf970>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x10d357dc0>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x10d357490>]}
+[0m22:59:30.520845 [debug] [MainThread]: Flushing usage events
+[0m22:59:37.834163 [debug] [MainThread]: Error sending anonymous usage statistics. Disabling tracking for this execution. If you wish to permanently disable tracking, see: https://docs.getdbt.com/reference/global-configs#send-anonymous-usage-stats.

@@ -1,0 +1,13 @@
+ecom_reco:
+  target: production
+  outputs:
+    production:
+      type: postgres
+      host: ${DBT_HOST}
+      port: ${DBT_PORT}
+      user: ${DBT_USER}
+      password: ${DBT_PASSWORD}
+      dbname: ${DBT_DATABASE}
+      schema: ${DBT_SCHEMA}
+      threads: 4
+      keepalives_idle: 0

@@ -82,10 +82,10 @@ placeholder as (
     dbt_invocation_id,
     triggered_by
   )
+  where not exists (select 1 from combined)
 )
 select *
 from combined
 union all
 select *
-from placeholder
-where not exists (select 1 from combined);
+from placeholder;
