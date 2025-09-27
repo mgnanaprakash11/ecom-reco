@@ -41,21 +41,24 @@ combined as (
   full outer join orders o
     on o.data_upload_batch_id = b.data_upload_batch_id
     and o.tenant_id = b.tenant_id
+),
+placeholder as (
+  select
+    null::uuid as data_upload_batch_id,
+    null::uuid as tenant_id,
+    0::int as rows_loaded,
+    0::int as reported_row_count,
+    'noop'::text as status,
+    null::timestamptz as processing_started_at,
+    null::timestamptz as processing_completed_at,
+    null::timestamptz as last_row_created_at,
+    current_timestamp as processed_at,
+    '{{ invocation_id }}'::text as dbt_invocation_id,
+    'dbt-placeholder'::text as triggered_by
 )
 select *
 from combined
 union all
-select
-  null as data_upload_batch_id,
-  null as tenant_id,
-  0 as rows_loaded,
-  0 as reported_row_count,
-  'noop' as status,
-  null as processing_started_at,
-  null as processing_completed_at,
-  null as last_row_created_at,
-  current_timestamp as processed_at,
-  '{{ invocation_id }}'::text as dbt_invocation_id,
-  'dbt-placeholder'::text as triggered_by
-from (select 1) as _placeholder
+select *
+from placeholder
 where not exists (select 1 from combined);
