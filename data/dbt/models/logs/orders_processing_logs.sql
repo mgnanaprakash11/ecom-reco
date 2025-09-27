@@ -44,17 +44,44 @@ combined as (
 ),
 placeholder as (
   select
-    null::uuid as data_upload_batch_id,
-    null::uuid as tenant_id,
-    0::int as rows_loaded,
-    0::int as reported_row_count,
-    'noop'::text as status,
-    null::timestamptz as processing_started_at,
-    null::timestamptz as processing_completed_at,
-    null::timestamptz as last_row_created_at,
-    current_timestamp as processed_at,
-    '{{ invocation_id }}'::text as dbt_invocation_id,
-    'dbt-placeholder'::text as triggered_by
+    data_upload_batch_id,
+    tenant_id,
+    rows_loaded,
+    reported_row_count,
+    status,
+    processing_started_at,
+    processing_completed_at,
+    last_row_created_at,
+    processed_at,
+    dbt_invocation_id,
+    triggered_by
+  from (
+    values (
+      cast(null as uuid),
+      cast(null as uuid),
+      0,
+      0,
+      'noop',
+      cast(null as timestamptz),
+      cast(null as timestamptz),
+      cast(null as timestamptz),
+      current_timestamp,
+      '{{ invocation_id }}'::text,
+      'dbt-placeholder'::text
+    )
+  ) as v(
+    data_upload_batch_id,
+    tenant_id,
+    rows_loaded,
+    reported_row_count,
+    status,
+    processing_started_at,
+    processing_completed_at,
+    last_row_created_at,
+    processed_at,
+    dbt_invocation_id,
+    triggered_by
+  )
 )
 select *
 from combined
