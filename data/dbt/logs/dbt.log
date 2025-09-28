@@ -203,3 +203,27 @@ Database Error
 [0m12:02:25.594800 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'end', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x10955ea60>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x1099b7b20>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x10c344910>]}
 [0m12:02:25.595282 [debug] [MainThread]: Flushing usage events
 [0m12:02:25.600714 [debug] [MainThread]: Error sending anonymous usage statistics. Disabling tracking for this execution. If you wish to permanently disable tracking, see: https://docs.getdbt.com/reference/global-configs#send-anonymous-usage-stats.
+[0m12:08:57.687485 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'start', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x108fdaa00>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x10b265a00>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x10b265be0>]}
+
+
+============================== 12:08:57.692168 | 54ebc552-a054-4a66-bd5a-e09517f0ccdb ==============================
+[0m12:08:57.692168 [info ] [MainThread]: Running with dbt=1.8.9
+[0m12:08:57.692737 [debug] [MainThread]: running dbt with arguments {'printer_width': '80', 'indirect_selection': 'eager', 'write_json': 'True', 'log_cache_events': 'False', 'partial_parse': 'True', 'cache_selected_only': 'False', 'profiles_dir': '/tmp/dbt-profile', 'fail_fast': 'False', 'version_check': 'True', 'log_path': '/Users/gnana/Dev/Projects/ecom-reco/data/dbt/logs', 'debug': 'False', 'warn_error': 'None', 'use_colors': 'True', 'use_experimental_parser': 'False', 'empty': 'None', 'quiet': 'False', 'no_print': 'None', 'log_format': 'default', 'invocation_command': 'dbt parse --target dev', 'warn_error_options': 'WarnErrorOptions(include=[], exclude=[])', 'static_parser': 'True', 'target_path': 'None', 'introspect': 'True', 'send_anonymous_usage_stats': 'True'}
+[0m12:08:57.815586 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'project_id', 'label': '54ebc552-a054-4a66-bd5a-e09517f0ccdb', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x10b5439d0>]}
+[0m12:08:57.846076 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'adapter_info', 'label': '54ebc552-a054-4a66-bd5a-e09517f0ccdb', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x10a6d37f0>]}
+[0m12:08:57.846935 [info ] [MainThread]: Registered adapter: postgres=1.8.2
+[0m12:08:57.900019 [debug] [MainThread]: checksum: 7c9f24cadb9ed71bfad0146ef54df7f5d259c85b535c1ae4260269edc44b8995, vars: {}, profile: , target: dev, version: 1.8.9
+[0m12:08:57.965119 [debug] [MainThread]: Partial parsing enabled: 0 files deleted, 0 files added, 1 files changed.
+[0m12:08:57.965715 [debug] [MainThread]: Partial parsing: updated file: ecom_reco://models/logs/orders_processing_logs.sql
+[0m12:08:58.104687 [warn ] [MainThread]: [[33mWARNING[0m]: Deprecated functionality
+The `tests` config has been renamed to `data_tests`. Please see
+https://docs.getdbt.com/docs/build/data-tests#new-data_tests-syntax for more
+information.
+[0m12:08:58.105332 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'deprecation', 'label': '54ebc552-a054-4a66-bd5a-e09517f0ccdb', 'property_': 'warn', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x10b2352b0>]}
+[0m12:08:58.192145 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'load_project', 'label': '54ebc552-a054-4a66-bd5a-e09517f0ccdb', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x10c0dd130>]}
+[0m12:08:58.195010 [info ] [MainThread]: Performance info: /Users/gnana/Dev/Projects/ecom-reco/data/dbt/target/perf_info.json
+[0m12:08:58.242856 [debug] [MainThread]: Resource report: {"command_name": "parse", "command_success": true, "command_wall_clock_time": 0.58955836, "process_in_blocks": "0", "process_kernel_time": 0.134412, "process_mem_max_rss": "122224640", "process_out_blocks": "0", "process_user_time": 1.100875}
+[0m12:08:58.243627 [debug] [MainThread]: Command `dbt parse` succeeded at 12:08:58.243399 after 0.59 seconds
+[0m12:08:58.244034 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'end', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x108fdaa00>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x10a6d37f0>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x109415c70>]}
+[0m12:08:58.244435 [debug] [MainThread]: Flushing usage events
+[0m12:08:58.250308 [debug] [MainThread]: Error sending anonymous usage statistics. Disabling tracking for this execution. If you wish to permanently disable tracking, see: https://docs.getdbt.com/reference/global-configs#send-anonymous-usage-stats.

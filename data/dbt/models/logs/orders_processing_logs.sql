@@ -62,4 +62,4 @@ select
   '{{ invocation_id }}'::text as dbt_invocation_id,
   'dbt-placeholder'::text as triggered_by
 from combined_stats
-where row_count = 0;
+where row_count = 0
