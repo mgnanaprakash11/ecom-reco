@@ -6,9 +6,8 @@ ecom_reco:
       host: "{{ env_var('DBT_HOST') }}"
       user: "{{ env_var('DBT_USER') }}"
       password: "{{ env_var('DBT_PASSWORD') }}"
-      port: "{{ env_var('DBT_PORT', '5432') }}"
+      port: 5432
       dbname: "{{ env_var('DBT_DBNAME') }}"
       schema: "{{ env_var('DBT_SCHEMA', 'public') }}"
       threads: 4
       sslmode: prefer
-
