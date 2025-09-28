@@ -227,3 +227,351 @@ information.
 [0m12:08:58.244034 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'end', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x108fdaa00>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x10a6d37f0>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x109415c70>]}
 [0m12:08:58.244435 [debug] [MainThread]: Flushing usage events
 [0m12:08:58.250308 [debug] [MainThread]: Error sending anonymous usage statistics. Disabling tracking for this execution. If you wish to permanently disable tracking, see: https://docs.getdbt.com/reference/global-configs#send-anonymous-usage-stats.
+[0m13:26:38.926840 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'start', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x107ea7bb0>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x108f28190>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x108f28460>]}
+
+
+============================== 13:26:38.930945 | 4a06824d-779e-4cf5-8a3e-e43719db9156 ==============================
+[0m13:26:38.930945 [info ] [MainThread]: Running with dbt=1.10.13
+[0m13:26:38.931487 [debug] [MainThread]: running dbt with arguments {'partial_parse': 'True', 'invocation_command': 'dbt run --project-dir data/dbt --select orders_processing_logs', 'version_check': 'True', 'log_path': 'data/dbt/logs', 'printer_width': '80', 'indirect_selection': 'eager', 'warn_error_options': 'WarnErrorOptionsV2(error=[], warn=[], silence=[])', 'warn_error': 'None', 'fail_fast': 'False', 'quiet': 'False', 'use_experimental_parser': 'False', 'debug': 'False', 'log_cache_events': 'False', 'no_print': 'None', 'empty': 'False', 'log_format': 'default', 'target_path': 'None', 'profiles_dir': '/Users/gnana/Dev/Projects/ecom-reco/data/dbt', 'send_anonymous_usage_stats': 'True', 'introspect': 'True', 'write_json': 'True', 'use_colors': 'True', 'static_parser': 'True', 'cache_selected_only': 'False'}
+[0m13:26:39.093575 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'project_id', 'label': '4a06824d-779e-4cf5-8a3e-e43719db9156', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x108edda60>]}
+[0m13:26:39.147402 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'adapter_info', 'label': '4a06824d-779e-4cf5-8a3e-e43719db9156', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x108cc04f0>]}
+[0m13:26:39.148783 [info ] [MainThread]: Registered adapter: postgres=1.8.2
+[0m13:26:39.255901 [debug] [MainThread]: checksum: 9f0c81e2574b4ff463f3d16d080df83c6982fc0372c9feeacae0504ac9ea3ffe, vars: {}, profile: , target: , version: 1.10.13
+[0m13:26:39.415874 [debug] [MainThread]: Partial parsing enabled: 0 files deleted, 0 files added, 0 files changed.
+[0m13:26:39.416356 [debug] [MainThread]: Partial parsing enabled, no changes found, skipping parsing
+[0m13:26:39.467903 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'load_project', 'label': '4a06824d-779e-4cf5-8a3e-e43719db9156', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x109b33130>]}
+[0m13:26:39.561750 [debug] [MainThread]: Wrote artifact WritableManifest to data/dbt/target/manifest.json
+[0m13:26:39.564228 [debug] [MainThread]: Wrote artifact SemanticManifest to data/dbt/target/semantic_manifest.json
+[0m13:26:39.579703 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'resource_counts', 'label': '4a06824d-779e-4cf5-8a3e-e43719db9156', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x109b3fac0>]}
+[0m13:26:39.580290 [info ] [MainThread]: Found 3 models, 2 data tests, 3 sources, 433 macros
+[0m13:26:39.580644 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'runnable_timing', 'label': '4a06824d-779e-4cf5-8a3e-e43719db9156', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x109af7e50>]}
+[0m13:26:39.581662 [info ] [MainThread]: 
+[0m13:26:39.582023 [info ] [MainThread]: Concurrency: 4 threads (target='dev')
+[0m13:26:39.582314 [info ] [MainThread]: 
+[0m13:26:39.582794 [debug] [MainThread]: Acquiring new postgres connection 'master'
+[0m13:26:39.583600 [debug] [ThreadPool]: Acquiring new postgres connection 'list_neondb'
+[0m13:26:39.672313 [debug] [ThreadPool]: Using postgres connection "list_neondb"
+[0m13:26:39.672799 [debug] [ThreadPool]: On list_neondb: /* {"app": "dbt", "dbt_version": "1.10.13", "profile_name": "ecom_reco", "target_name": "dev", "connection_name": "list_neondb"} */
+
+    select distinct nspname from pg_namespace
+  
+[0m13:26:39.673135 [debug] [ThreadPool]: Opening a new connection, currently in state init
+[0m13:26:40.159890 [debug] [ThreadPool]: SQL status: SELECT 6 in 0.487 seconds
+[0m13:26:40.161456 [debug] [ThreadPool]: On list_neondb: Close
+[0m13:26:40.162925 [debug] [ThreadPool]: Re-using an available connection from the pool (formerly list_neondb, now list_neondb_raw)
+[0m13:26:40.169256 [debug] [ThreadPool]: Using postgres connection "list_neondb_raw"
+[0m13:26:40.169752 [debug] [ThreadPool]: Acquiring new postgres connection 'list_neondb_raw_marts'
+[0m13:26:40.170075 [debug] [ThreadPool]: On list_neondb_raw: BEGIN
+[0m13:26:40.170555 [debug] [ThreadPool]: Acquiring new postgres connection 'list_neondb_raw_stg'
+[0m13:26:40.172567 [debug] [ThreadPool]: Using postgres connection "list_neondb_raw_marts"
+[0m13:26:40.172936 [debug] [ThreadPool]: Opening a new connection, currently in state closed
+[0m13:26:40.175304 [debug] [ThreadPool]: Using postgres connection "list_neondb_raw_stg"
+[0m13:26:40.175628 [debug] [ThreadPool]: On list_neondb_raw_marts: BEGIN
+[0m13:26:40.176045 [debug] [ThreadPool]: On list_neondb_raw_stg: BEGIN
+[0m13:26:40.176342 [debug] [ThreadPool]: Opening a new connection, currently in state init
+[0m13:26:40.176623 [debug] [ThreadPool]: Opening a new connection, currently in state init
+[0m13:26:40.651830 [debug] [ThreadPool]: SQL status: BEGIN in 0.475 seconds
+[0m13:26:40.653456 [debug] [ThreadPool]: Using postgres connection "list_neondb_raw_marts"
+[0m13:26:40.654187 [debug] [ThreadPool]: SQL status: BEGIN in 0.481 seconds
+[0m13:26:40.654848 [debug] [ThreadPool]: On list_neondb_raw_marts: /* {"app": "dbt", "dbt_version": "1.10.13", "profile_name": "ecom_reco", "target_name": "dev", "connection_name": "list_neondb_raw_marts"} */
+select
+      'neondb' as database,
+      tablename as name,
+      schemaname as schema,
+      'table' as type
+    from pg_tables
+    where schemaname ilike 'raw_marts'
+    union all
+    select
+      'neondb' as database,
+      viewname as name,
+      schemaname as schema,
+      'view' as type
+    from pg_views
+    where schemaname ilike 'raw_marts'
+    union all
+    select
+      'neondb' as database,
+      matviewname as name,
+      schemaname as schema,
+      'materialized_view' as type
+    from pg_matviews
+    where schemaname ilike 'raw_marts'
+  
+[0m13:26:40.655450 [debug] [ThreadPool]: Using postgres connection "list_neondb_raw"
+[0m13:26:40.655971 [debug] [ThreadPool]: SQL status: BEGIN in 0.479 seconds
+[0m13:26:40.656550 [debug] [ThreadPool]: On list_neondb_raw: /* {"app": "dbt", "dbt_version": "1.10.13", "profile_name": "ecom_reco", "target_name": "dev", "connection_name": "list_neondb_raw"} */
+select
+      'neondb' as database,
+      tablename as name,
+      schemaname as schema,
+      'table' as type
+    from pg_tables
+    where schemaname ilike 'raw'
+    union all
+    select
+      'neondb' as database,
+      viewname as name,
+      schemaname as schema,
+      'view' as type
+    from pg_views
+    where schemaname ilike 'raw'
+    union all
+    select
+      'neondb' as database,
+      matviewname as name,
+      schemaname as schema,
+      'materialized_view' as type
+    from pg_matviews
+    where schemaname ilike 'raw'
+  
+[0m13:26:40.657122 [debug] [ThreadPool]: Using postgres connection "list_neondb_raw_stg"
+[0m13:26:40.657723 [debug] [ThreadPool]: On list_neondb_raw_stg: /* {"app": "dbt", "dbt_version": "1.10.13", "profile_name": "ecom_reco", "target_name": "dev", "connection_name": "list_neondb_raw_stg"} */
+select
+      'neondb' as database,
+      tablename as name,
+      schemaname as schema,
+      'table' as type
+    from pg_tables
+    where schemaname ilike 'raw_stg'
+    union all
+    select
+      'neondb' as database,
+      viewname as name,
+      schemaname as schema,
+      'view' as type
+    from pg_views
+    where schemaname ilike 'raw_stg'
+    union all
+    select
+      'neondb' as database,
+      matviewname as name,
+      schemaname as schema,
+      'materialized_view' as type
+    from pg_matviews
+    where schemaname ilike 'raw_stg'
+  
+[0m13:26:40.709260 [debug] [ThreadPool]: SQL status: SELECT 2 in 0.052 seconds
+[0m13:26:40.709726 [debug] [ThreadPool]: SQL status: SELECT 0 in 0.053 seconds
+[0m13:26:40.710932 [debug] [ThreadPool]: On list_neondb_raw: ROLLBACK
+[0m13:26:40.711310 [debug] [ThreadPool]: SQL status: SELECT 0 in 0.053 seconds
+[0m13:26:40.712287 [debug] [ThreadPool]: On list_neondb_raw_marts: ROLLBACK
+[0m13:26:40.713285 [debug] [ThreadPool]: On list_neondb_raw_stg: ROLLBACK
+[0m13:26:40.764730 [debug] [ThreadPool]: On list_neondb_raw: Close
+[0m13:26:40.766064 [debug] [ThreadPool]: On list_neondb_raw_stg: Close
+[0m13:26:40.766396 [debug] [ThreadPool]: On list_neondb_raw_marts: Close
+[0m13:26:40.770899 [debug] [MainThread]: Using postgres connection "master"
+[0m13:26:40.771318 [debug] [MainThread]: On master: BEGIN
+[0m13:26:40.771641 [debug] [MainThread]: Opening a new connection, currently in state init
+[0m13:26:41.206939 [debug] [MainThread]: SQL status: BEGIN in 0.435 seconds
+[0m13:26:41.208450 [debug] [MainThread]: Using postgres connection "master"
+[0m13:26:41.209704 [debug] [MainThread]: On master: /* {"app": "dbt", "dbt_version": "1.10.13", "profile_name": "ecom_reco", "target_name": "dev", "connection_name": "master"} */
+with relation as (
+        select
+            pg_rewrite.ev_class as class,
+            pg_rewrite.oid as id
+        from pg_rewrite
+    ),
+    class as (
+        select
+            oid as id,
+            relname as name,
+            relnamespace as schema,
+            relkind as kind
+        from pg_class
+    ),
+    dependency as (
+        select distinct
+            pg_depend.objid as id,
+            pg_depend.refobjid as ref
+        from pg_depend
+    ),
+    schema as (
+        select
+            pg_namespace.oid as id,
+            pg_namespace.nspname as name
+        from pg_namespace
+        where nspname != 'information_schema' and nspname not like 'pg\_%'
+    ),
+    referenced as (
+        select
+            relation.id AS id,
+            referenced_class.name ,
+            referenced_class.schema ,
+            referenced_class.kind
+        from relation
+        join class as referenced_class on relation.class=referenced_class.id
+        where referenced_class.kind in ('r', 'v', 'm')
+    ),
+    relationships as (
+        select
+            referenced.name as referenced_name,
+            referenced.schema as referenced_schema_id,
+            dependent_class.name as dependent_name,
+            dependent_class.schema as dependent_schema_id,
+            referenced.kind as kind
+        from referenced
+        join dependency on referenced.id=dependency.id
+        join class as dependent_class on dependency.ref=dependent_class.id
+        where
+            (referenced.name != dependent_class.name or
+             referenced.schema != dependent_class.schema)
+    )
+
+    select
+        referenced_schema.name as referenced_schema,
+        relationships.referenced_name as referenced_name,
+        dependent_schema.name as dependent_schema,
+        relationships.dependent_name as dependent_name
+    from relationships
+    join schema as dependent_schema on relationships.dependent_schema_id=dependent_schema.id
+    join schema as referenced_schema on relationships.referenced_schema_id=referenced_schema.id
+    group by referenced_schema, referenced_name, dependent_schema, dependent_name
+    order by referenced_schema, referenced_name, dependent_schema, dependent_name;
+[0m13:26:41.266466 [debug] [MainThread]: SQL status: SELECT 0 in 0.056 seconds
+[0m13:26:41.270255 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'runnable_timing', 'label': '4a06824d-779e-4cf5-8a3e-e43719db9156', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x109c28130>]}
+[0m13:26:41.271332 [debug] [MainThread]: On master: ROLLBACK
+[0m13:26:41.330508 [debug] [MainThread]: Using postgres connection "master"
+[0m13:26:41.331554 [debug] [MainThread]: On master: BEGIN
+[0m13:26:41.435225 [debug] [MainThread]: SQL status: BEGIN in 0.103 seconds
+[0m13:26:41.436347 [debug] [MainThread]: On master: COMMIT
+[0m13:26:41.436958 [debug] [MainThread]: Using postgres connection "master"
+[0m13:26:41.437421 [debug] [MainThread]: On master: COMMIT
+[0m13:26:41.489827 [debug] [MainThread]: SQL status: COMMIT in 0.052 seconds
+[0m13:26:41.491435 [debug] [MainThread]: On master: Close
+[0m13:26:41.498123 [debug] [Thread-1  ]: Began running node model.ecom_reco.orders_processing_logs
+[0m13:26:41.499393 [info ] [Thread-1  ]: 1 of 1 START sql table model raw.orders_processing_logs ........................ [RUN]
+[0m13:26:41.500288 [debug] [Thread-1  ]: Re-using an available connection from the pool (formerly list_neondb_raw, now model.ecom_reco.orders_processing_logs)
+[0m13:26:41.500867 [debug] [Thread-1  ]: Began compiling node model.ecom_reco.orders_processing_logs
+[0m13:26:41.512876 [debug] [Thread-1  ]: Writing injected SQL for node "model.ecom_reco.orders_processing_logs"
+[0m13:26:41.514158 [debug] [Thread-1  ]: Began executing node model.ecom_reco.orders_processing_logs
+[0m13:26:41.552500 [debug] [Thread-1  ]: Writing runtime sql for node "model.ecom_reco.orders_processing_logs"
+[0m13:26:41.553289 [debug] [Thread-1  ]: Using postgres connection "model.ecom_reco.orders_processing_logs"
+[0m13:26:41.553649 [debug] [Thread-1  ]: On model.ecom_reco.orders_processing_logs: BEGIN
+[0m13:26:41.553977 [debug] [Thread-1  ]: Opening a new connection, currently in state closed
+[0m13:26:42.003629 [debug] [Thread-1  ]: SQL status: BEGIN in 0.449 seconds
+[0m13:26:42.004644 [debug] [Thread-1  ]: Using postgres connection "model.ecom_reco.orders_processing_logs"
+[0m13:26:42.005265 [debug] [Thread-1  ]: On model.ecom_reco.orders_processing_logs: /* {"app": "dbt", "dbt_version": "1.10.13", "profile_name": "ecom_reco", "target_name": "dev", "node_id": "model.ecom_reco.orders_processing_logs"} */
+
+  
+    
+
+  create  table "neondb"."raw"."orders_processing_logs__dbt_tmp"
+  
+  
+    as
+  
+  (
+    
+
+with batches as (
+  select
+    id as data_upload_batch_id,
+    tenant_id,
+    coalesce(row_count, 0) as reported_row_count,
+    status,
+    processing_started_at,
+    processing_completed_at,
+    updated_at
+  from "neondb"."public"."data_upload_batches"
+),
+orders as (
+  select
+    data_upload_batch_id,
+    tenant_id,
+    count(*) as rows_loaded,
+    max(created_at) as last_row_created_at
+  from "neondb"."raw"."orders"
+  group by 1, 2
+),
+combined as (
+  select
+    coalesce(b.data_upload_batch_id, o.data_upload_batch_id) as data_upload_batch_id,
+    coalesce(b.tenant_id, o.tenant_id) as tenant_id,
+    coalesce(o.rows_loaded, 0) as rows_loaded,
+    coalesce(b.reported_row_count, 0) as reported_row_count,
+    coalesce(b.status, 'loaded'::data_upload_status) as status,
+    b.processing_started_at,
+    b.processing_completed_at,
+    o.last_row_created_at,
+    current_timestamp as processed_at,
+    '4a06824d-779e-4cf5-8a3e-e43719db9156'::text as dbt_invocation_id,
+    'github-actions'::text as triggered_by
+  from batches b
+  full outer join orders o
+    on o.data_upload_batch_id = b.data_upload_batch_id
+    and o.tenant_id = b.tenant_id
+),
+combined_stats as (
+  select count(*) as row_count
+  from combined
+)
+select *
+from combined
+union all
+select
+  cast(null as uuid) as data_upload_batch_id,
+  cast(null as uuid) as tenant_id,
+  0 as rows_loaded,
+  0 as reported_row_count,
+  'completed'::data_upload_status as status,
+  cast(null as timestamptz) as processing_started_at,
+  cast(null as timestamptz) as processing_completed_at,
+  cast(null as timestamptz) as last_row_created_at,
+  current_timestamp as processed_at,
+  '4a06824d-779e-4cf5-8a3e-e43719db9156'::text as dbt_invocation_id,
+  'dbt-placeholder'::text as triggered_by
+from combined_stats
+where row_count = 0
+  );
+  
+[0m13:26:42.071061 [debug] [Thread-1  ]: SQL status: SELECT 18 in 0.065 seconds
+[0m13:26:42.085938 [debug] [Thread-1  ]: Using postgres connection "model.ecom_reco.orders_processing_logs"
+[0m13:26:42.086485 [debug] [Thread-1  ]: On model.ecom_reco.orders_processing_logs: /* {"app": "dbt", "dbt_version": "1.10.13", "profile_name": "ecom_reco", "target_name": "dev", "node_id": "model.ecom_reco.orders_processing_logs"} */
+alter table "neondb"."raw"."orders_processing_logs" rename to "orders_processing_logs__dbt_backup"
+[0m13:26:42.138714 [debug] [Thread-1  ]: SQL status: ALTER TABLE in 0.052 seconds
+[0m13:26:42.144701 [debug] [Thread-1  ]: Using postgres connection "model.ecom_reco.orders_processing_logs"
+[0m13:26:42.145267 [debug] [Thread-1  ]: On model.ecom_reco.orders_processing_logs: /* {"app": "dbt", "dbt_version": "1.10.13", "profile_name": "ecom_reco", "target_name": "dev", "node_id": "model.ecom_reco.orders_processing_logs"} */
+alter table "neondb"."raw"."orders_processing_logs__dbt_tmp" rename to "orders_processing_logs"
+[0m13:26:42.196822 [debug] [Thread-1  ]: SQL status: ALTER TABLE in 0.051 seconds
+[0m13:26:42.216639 [debug] [Thread-1  ]: On model.ecom_reco.orders_processing_logs: COMMIT
+[0m13:26:42.217155 [debug] [Thread-1  ]: Using postgres connection "model.ecom_reco.orders_processing_logs"
+[0m13:26:42.217507 [debug] [Thread-1  ]: On model.ecom_reco.orders_processing_logs: COMMIT
+[0m13:26:42.273369 [debug] [Thread-1  ]: SQL status: COMMIT in 0.055 seconds
+[0m13:26:42.282193 [debug] [Thread-1  ]: Applying DROP to: "neondb"."raw"."orders_processing_logs__dbt_backup"
+[0m13:26:42.286915 [debug] [Thread-1  ]: Using postgres connection "model.ecom_reco.orders_processing_logs"
+[0m13:26:42.287308 [debug] [Thread-1  ]: On model.ecom_reco.orders_processing_logs: /* {"app": "dbt", "dbt_version": "1.10.13", "profile_name": "ecom_reco", "target_name": "dev", "node_id": "model.ecom_reco.orders_processing_logs"} */
+drop table if exists "neondb"."raw"."orders_processing_logs__dbt_backup" cascade
+[0m13:26:42.345047 [debug] [Thread-1  ]: SQL status: DROP TABLE in 0.057 seconds
+[0m13:26:42.349227 [debug] [Thread-1  ]: On model.ecom_reco.orders_processing_logs: Close
+[0m13:26:42.352684 [debug] [Thread-1  ]: Sending event: {'category': 'dbt', 'action': 'run_model', 'label': '4a06824d-779e-4cf5-8a3e-e43719db9156', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x1093a86d0>]}
+[0m13:26:42.353529 [info ] [Thread-1  ]: 1 of 1 OK created sql table model raw.orders_processing_logs ................... [[32mSELECT 18[0m in 0.85s]
+[0m13:26:42.354180 [debug] [Thread-1  ]: Finished running node model.ecom_reco.orders_processing_logs
+[0m13:26:42.355442 [debug] [MainThread]: Using postgres connection "master"
+[0m13:26:42.355826 [debug] [MainThread]: On master: BEGIN
+[0m13:26:42.356139 [debug] [MainThread]: Opening a new connection, currently in state closed
+[0m13:26:42.778054 [debug] [MainThread]: SQL status: BEGIN in 0.422 seconds
+[0m13:26:42.779223 [debug] [MainThread]: On master: COMMIT
+[0m13:26:42.779927 [debug] [MainThread]: Using postgres connection "master"
+[0m13:26:42.780470 [debug] [MainThread]: On master: COMMIT
+[0m13:26:42.833012 [debug] [MainThread]: SQL status: COMMIT in 0.052 seconds
+[0m13:26:42.834636 [debug] [MainThread]: On master: Close
+[0m13:26:42.836453 [debug] [MainThread]: Connection 'master' was properly closed.
+[0m13:26:42.837150 [debug] [MainThread]: Connection 'model.ecom_reco.orders_processing_logs' was properly closed.
+[0m13:26:42.837650 [debug] [MainThread]: Connection 'list_neondb_raw_marts' was properly closed.
+[0m13:26:42.838077 [debug] [MainThread]: Connection 'list_neondb_raw_stg' was properly closed.
+[0m13:26:42.838605 [info ] [MainThread]: 
+[0m13:26:42.839110 [info ] [MainThread]: Finished running 1 table model in 0 hours 0 minutes and 3.26 seconds (3.26s).
+[0m13:26:42.840161 [debug] [MainThread]: Command end result
+[0m13:26:42.867527 [debug] [MainThread]: Wrote artifact WritableManifest to data/dbt/target/manifest.json
+[0m13:26:42.869500 [debug] [MainThread]: Wrote artifact SemanticManifest to data/dbt/target/semantic_manifest.json
+[0m13:26:42.875693 [debug] [MainThread]: Wrote artifact RunExecutionResult to data/dbt/target/run_results.json
+[0m13:26:42.876031 [info ] [MainThread]: 
+[0m13:26:42.876431 [info ] [MainThread]: [32mCompleted successfully[0m
+[0m13:26:42.876737 [info ] [MainThread]: 
+[0m13:26:42.877067 [info ] [MainThread]: Done. PASS=1 WARN=0 ERROR=0 SKIP=0 NO-OP=0 TOTAL=1
+[0m13:26:42.880077 [debug] [MainThread]: Resource report: {"command_name": "run", "command_success": true, "command_wall_clock_time": 4.018851, "process_in_blocks": "0", "process_kernel_time": 0.297666, "process_mem_max_rss": "128024576", "process_out_blocks": "0", "process_user_time": 2.024293}
+[0m13:26:42.880495 [debug] [MainThread]: Command `dbt run` succeeded at 13:26:42.880416 after 4.02 seconds
+[0m13:26:42.880898 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'end', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x107ea7bb0>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x108cc04f0>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x10816ea60>]}
+[0m13:26:42.881297 [debug] [MainThread]: Flushing usage events
+[0m13:26:44.211871 [debug] [MainThread]: An error was encountered while trying to flush usage events

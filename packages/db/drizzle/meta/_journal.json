@@ -8,6 +8,41 @@
       "when": 1758984027666,
       "tag": "0000_baseline",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1759060762611,
+      "tag": "0001_daffy_doctor_doom",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1759061046278,
+      "tag": "0002_gray_zeigeist",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1759062477400,
+      "tag": "0003_premium_senator_kelly",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1759063985262,
+      "tag": "0004_keen_justice",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1759064692367,
+      "tag": "0005_easy_rogue",
+      "breakpoints": true
     }
   ]
 }

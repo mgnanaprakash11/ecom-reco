@@ -6,9 +6,14 @@ import {
   timestamp,
   index,
   text,
+  bigint,
 } from "drizzle-orm/pg-core";
 
-import { dataUploadBatches, tenants } from "./reconciliation.ts";
+import {
+  dataUploadBatches,
+  dataUploadStatusEnum,
+  tenants,
+} from "./reconciliation.ts";
 
 const raw = pgSchema("raw");
 
@@ -41,13 +46,15 @@ export const rawOrders = raw.table(
 export const rawOrdersProcessingLogs = raw.table("orders_processing_logs", {
   dataUploadBatchId: uuid("data_upload_batch_id"),
   tenantId: uuid("tenant_id"),
-  rowsLoaded: integer("rows_loaded").default(0),
-  reportedRowCount: integer("reported_row_count").default(0),
-  status: text("status").default("loaded"),
+  rowsLoaded: bigint("rows_loaded", { mode: "number" }),
+  reportedRowCount: integer("reported_row_count"),
+  status: dataUploadStatusEnum("status"),
   processingStartedAt: timestamp("processing_started_at", { withTimezone: true }),
   processingCompletedAt: timestamp("processing_completed_at", { withTimezone: true }),
   lastRowCreatedAt: timestamp("last_row_created_at", { withTimezone: true }),
-  processedAt: timestamp("processed_at", { withTimezone: true }).defaultNow(),
+  processedAt: timestamp("processed_at", { withTimezone: true }),
   dbtInvocationId: text("dbt_invocation_id"),
   triggeredBy: text("triggered_by"),
+   errorMessage: text("error_message").default("none"),
+  additionalInfo: jsonb("additional_info").$default(null),
 });

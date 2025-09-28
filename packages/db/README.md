@@ -66,11 +66,13 @@ Generate SQL after schema changes:
 pnpm --filter db run generate
 ```
 
-Apply migrations (e.g., in local dev):
+Apply migrations (e.g., in local dev or CI):
 
 ```sh
 pnpm --filter db run push
 ```
+
+> `push` now runs the Drizzle migrator under the hood (no diff-based drops). Use `pnpm --filter db run drizzle:push` only when you explicitly want Drizzle Kit’s destructive diff preview.
 
 Open Drizzle Studio if you want to inspect data:
 

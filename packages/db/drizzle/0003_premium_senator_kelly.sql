@@ -1,0 +1,1 @@
+ALTER TABLE "raw"."orders_processing_logs" ADD COLUMN "error_message" text;
