@@ -1,6 +1,5 @@
 {{ config(
   materialized='table',
-  schema='raw',
   alias='orders_processing_logs'
 ) }}
 

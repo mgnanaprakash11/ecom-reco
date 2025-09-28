@@ -16,5 +16,4 @@ models:
     marts:
       +schema: marts
     logs:
-      +schema: raw
       +materialized: table
