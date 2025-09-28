@@ -41,23 +41,8 @@ combined as (
   full outer join orders o
     on o.data_upload_batch_id = b.data_upload_batch_id
     and o.tenant_id = b.tenant_id
-)
-select *
-from combined
-union all
-select
-  data_upload_batch_id,
-  tenant_id,
-  rows_loaded,
-  reported_row_count,
-  status,
-  processing_started_at,
-  processing_completed_at,
-  last_row_created_at,
-  processed_at,
-  dbt_invocation_id,
-  triggered_by
-from (
+),
+placeholder as (
   select
     cast(null as uuid) as data_upload_batch_id,
     cast(null as uuid) as tenant_id,
@@ -70,5 +55,10 @@ from (
     current_timestamp as processed_at,
     '{{ invocation_id }}'::text as dbt_invocation_id,
     'dbt-placeholder'::text as triggered_by
-) placeholder
-where not exists (select 1 from combined);
+  where not exists (select 1 from combined)
+)
+select *
+from combined
+union all
+select *
+from placeholder;
