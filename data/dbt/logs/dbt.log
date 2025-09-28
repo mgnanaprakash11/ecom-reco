@@ -38,3 +38,168 @@ Parsing Error
 [0m22:59:30.520698 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'end', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x10b0bf970>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x10d357dc0>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x10d357490>]}
 [0m22:59:30.520845 [debug] [MainThread]: Flushing usage events
 [0m22:59:37.834163 [debug] [MainThread]: Error sending anonymous usage statistics. Disabling tracking for this execution. If you wish to permanently disable tracking, see: https://docs.getdbt.com/reference/global-configs#send-anonymous-usage-stats.
+[0m12:01:09.605689 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'start', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x10af66a90>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x10d1f8700>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x10d1f8520>]}
+
+
+============================== 12:01:09.610875 | 8338503d-9a03-4e40-9b6f-655eab56ff40 ==============================
+[0m12:01:09.610875 [info ] [MainThread]: Running with dbt=1.8.9
+[0m12:01:09.611419 [debug] [MainThread]: running dbt with arguments {'printer_width': '80', 'indirect_selection': 'eager', 'write_json': 'True', 'log_cache_events': 'False', 'partial_parse': 'True', 'cache_selected_only': 'False', 'warn_error': 'None', 'version_check': 'True', 'fail_fast': 'False', 'log_path': '/Users/gnana/Dev/Projects/ecom-reco/data/dbt/logs', 'profiles_dir': '/Users/gnana/Dev/Projects/ecom-reco/data/dbt', 'debug': 'False', 'use_colors': 'True', 'use_experimental_parser': 'False', 'no_print': 'None', 'quiet': 'False', 'empty': 'False', 'log_format': 'default', 'introspect': 'True', 'invocation_command': 'dbt compile --target dev --select orders_processing_logs', 'static_parser': 'True', 'target_path': 'None', 'warn_error_options': 'WarnErrorOptions(include=[], exclude=[])', 'send_anonymous_usage_stats': 'True'}
+[0m12:01:09.613872 [error] [MainThread]: Encountered an error:
+Parsing Error
+  Env var required but not provided: 'DBT_HOST'
+[0m12:01:09.615770 [debug] [MainThread]: Resource report: {"command_name": "compile", "command_success": false, "command_wall_clock_time": 0.046192415, "process_in_blocks": "0", "process_kernel_time": 0.130807, "process_mem_max_rss": "101220352", "process_out_blocks": "0", "process_user_time": 0.632323}
+[0m12:01:09.616445 [debug] [MainThread]: Command `dbt compile` failed at 12:01:09.616193 after 0.05 seconds
+[0m12:01:09.616854 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'end', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x10af66a90>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x10d1af850>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x10d1af0a0>]}
+[0m12:01:09.617262 [debug] [MainThread]: Flushing usage events
+[0m12:01:09.625422 [debug] [MainThread]: Error sending anonymous usage statistics. Disabling tracking for this execution. If you wish to permanently disable tracking, see: https://docs.getdbt.com/reference/global-configs#send-anonymous-usage-stats.
+[0m12:01:13.220502 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'start', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x1092fdc40>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x10b53d430>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x10b53d250>]}
+
+
+============================== 12:01:13.224945 | a0318f34-6da1-4a45-ba62-019225af7dfd ==============================
+[0m12:01:13.224945 [info ] [MainThread]: Running with dbt=1.8.9
+[0m12:01:13.225464 [debug] [MainThread]: running dbt with arguments {'printer_width': '80', 'indirect_selection': 'eager', 'write_json': 'True', 'log_cache_events': 'False', 'partial_parse': 'True', 'cache_selected_only': 'False', 'profiles_dir': '/Users/gnana/Dev/Projects/ecom-reco/data/dbt', 'fail_fast': 'False', 'version_check': 'True', 'log_path': '/Users/gnana/Dev/Projects/ecom-reco/data/dbt/logs', 'warn_error': 'None', 'debug': 'False', 'use_colors': 'True', 'use_experimental_parser': 'False', 'empty': 'False', 'quiet': 'False', 'no_print': 'None', 'log_format': 'default', 'invocation_command': 'dbt compile --target dev --select orders_processing_logs', 'warn_error_options': 'WarnErrorOptions(include=[], exclude=[])', 'static_parser': 'True', 'target_path': 'None', 'introspect': 'True', 'send_anonymous_usage_stats': 'True'}
+[0m12:01:13.228454 [error] [MainThread]: Encountered an error:
+Parsing Error
+  Env var required but not provided: 'DBT_DBNAME'
+[0m12:01:13.229974 [debug] [MainThread]: Resource report: {"command_name": "compile", "command_success": false, "command_wall_clock_time": 0.04112283, "process_in_blocks": "0", "process_kernel_time": 0.080015, "process_mem_max_rss": "101367808", "process_out_blocks": "0", "process_user_time": 0.643219}
+[0m12:01:13.230678 [debug] [MainThread]: Command `dbt compile` failed at 12:01:13.230415 after 0.04 seconds
+[0m12:01:13.231103 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'end', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x1092fdc40>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x10af52c10>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x10b51ba90>]}
+[0m12:01:13.231547 [debug] [MainThread]: Flushing usage events
+[0m12:01:13.237246 [debug] [MainThread]: Error sending anonymous usage statistics. Disabling tracking for this execution. If you wish to permanently disable tracking, see: https://docs.getdbt.com/reference/global-configs#send-anonymous-usage-stats.
+[0m12:01:29.742344 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'start', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x10af45d30>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x10d1d8be0>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x10d1d8dc0>]}
+
+
+============================== 12:01:29.747112 | 83145271-7493-4a31-acb8-5c98d13d6e98 ==============================
+[0m12:01:29.747112 [info ] [MainThread]: Running with dbt=1.8.9
+[0m12:01:29.747849 [debug] [MainThread]: running dbt with arguments {'printer_width': '80', 'indirect_selection': 'eager', 'write_json': 'True', 'log_cache_events': 'False', 'partial_parse': 'True', 'cache_selected_only': 'False', 'profiles_dir': '/Users/gnana/Dev/Projects/ecom-reco/data/dbt', 'version_check': 'True', 'debug': 'False', 'log_path': '/Users/gnana/Dev/Projects/ecom-reco/data/dbt/logs', 'warn_error': 'None', 'fail_fast': 'False', 'use_colors': 'True', 'use_experimental_parser': 'False', 'no_print': 'None', 'quiet': 'False', 'empty': 'False', 'warn_error_options': 'WarnErrorOptions(include=[], exclude=[])', 'introspect': 'True', 'static_parser': 'True', 'invocation_command': 'dbt compile --target dev --select orders_processing_logs', 'target_path': 'None', 'log_format': 'default', 'send_anonymous_usage_stats': 'True'}
+[0m12:01:29.970272 [error] [MainThread]: Encountered an error:
+Runtime Error
+  Credentials in profile "ecom_reco", target "dev" invalid: '5432' is not of type 'integer'
+[0m12:01:29.972707 [debug] [MainThread]: Resource report: {"command_name": "compile", "command_success": false, "command_wall_clock_time": 0.26296037, "process_in_blocks": "0", "process_kernel_time": 0.090898, "process_mem_max_rss": "104480768", "process_out_blocks": "0", "process_user_time": 0.676478}
+[0m12:01:29.973674 [debug] [MainThread]: Command `dbt compile` failed at 12:01:29.973338 after 0.26 seconds
+[0m12:01:29.974251 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'end', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x10af45d30>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x10d4c7c10>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x10d180c40>]}
+[0m12:01:29.974835 [debug] [MainThread]: Flushing usage events
+[0m12:01:29.981269 [debug] [MainThread]: Error sending anonymous usage statistics. Disabling tracking for this execution. If you wish to permanently disable tracking, see: https://docs.getdbt.com/reference/global-configs#send-anonymous-usage-stats.
+[0m12:01:33.307447 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'start', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x1089d5c40>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x10ac154c0>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x10ac152e0>]}
+
+
+============================== 12:01:33.311993 | 1b48b65d-41fd-441d-91bc-b7717b65ce6a ==============================
+[0m12:01:33.311993 [info ] [MainThread]: Running with dbt=1.8.9
+[0m12:01:33.312531 [debug] [MainThread]: running dbt with arguments {'printer_width': '80', 'indirect_selection': 'eager', 'log_cache_events': 'False', 'write_json': 'True', 'partial_parse': 'True', 'cache_selected_only': 'False', 'warn_error': 'None', 'fail_fast': 'False', 'debug': 'False', 'log_path': '/Users/gnana/Dev/Projects/ecom-reco/data/dbt/logs', 'profiles_dir': '/Users/gnana/Dev/Projects/ecom-reco/data/dbt', 'version_check': 'True', 'use_colors': 'True', 'use_experimental_parser': 'False', 'no_print': 'None', 'quiet': 'False', 'empty': 'False', 'log_format': 'default', 'static_parser': 'True', 'invocation_command': 'dbt compile --target dev --select orders_processing_logs', 'introspect': 'True', 'target_path': 'None', 'warn_error_options': 'WarnErrorOptions(include=[], exclude=[])', 'send_anonymous_usage_stats': 'True'}
+[0m12:01:33.336202 [error] [MainThread]: Encountered an error:
+Runtime Error
+  Credentials in profile "ecom_reco", target "dev" invalid: '5432' is not of type 'integer'
+[0m12:01:33.337979 [debug] [MainThread]: Resource report: {"command_name": "compile", "command_success": false, "command_wall_clock_time": 0.06285058, "process_in_blocks": "0", "process_kernel_time": 0.077795, "process_mem_max_rss": "104464384", "process_out_blocks": "0", "process_user_time": 0.667799}
+[0m12:01:33.338655 [debug] [MainThread]: Command `dbt compile` failed at 12:01:33.338416 after 0.06 seconds
+[0m12:01:33.339086 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'end', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x1089d5c40>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x10aee62e0>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x10aee6eb0>]}
+[0m12:01:33.339518 [debug] [MainThread]: Flushing usage events
+[0m12:01:33.345132 [debug] [MainThread]: Error sending anonymous usage statistics. Disabling tracking for this execution. If you wish to permanently disable tracking, see: https://docs.getdbt.com/reference/global-configs#send-anonymous-usage-stats.
+[0m12:01:56.776111 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'start', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x10791ea60>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x109bb1790>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x109bb15b0>]}
+
+
+============================== 12:01:56.780630 | 12e2e146-43be-4486-93a2-a5da103e2ecc ==============================
+[0m12:01:56.780630 [info ] [MainThread]: Running with dbt=1.8.9
+[0m12:01:56.781149 [debug] [MainThread]: running dbt with arguments {'printer_width': '80', 'indirect_selection': 'eager', 'log_cache_events': 'False', 'write_json': 'True', 'partial_parse': 'True', 'cache_selected_only': 'False', 'warn_error': 'None', 'debug': 'False', 'profiles_dir': '/tmp/dbt-profile', 'log_path': '/Users/gnana/Dev/Projects/ecom-reco/data/dbt/logs', 'fail_fast': 'False', 'version_check': 'True', 'use_colors': 'True', 'use_experimental_parser': 'False', 'empty': 'False', 'quiet': 'False', 'no_print': 'None', 'warn_error_options': 'WarnErrorOptions(include=[], exclude=[])', 'invocation_command': 'dbt compile --target dev --select orders_processing_logs', 'log_format': 'default', 'introspect': 'True', 'target_path': 'None', 'static_parser': 'True', 'send_anonymous_usage_stats': 'True'}
+[0m12:01:56.901842 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'project_id', 'label': '12e2e146-43be-4486-93a2-a5da103e2ecc', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x109ee9460>]}
+[0m12:01:56.934013 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'adapter_info', 'label': '12e2e146-43be-4486-93a2-a5da103e2ecc', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x10a03b820>]}
+[0m12:01:56.935193 [info ] [MainThread]: Registered adapter: postgres=1.8.2
+[0m12:01:57.000227 [debug] [MainThread]: checksum: 7c9f24cadb9ed71bfad0146ef54df7f5d259c85b535c1ae4260269edc44b8995, vars: {}, profile: , target: dev, version: 1.8.9
+[0m12:01:57.001005 [info ] [MainThread]: Unable to do partial parsing because saved manifest not found. Starting full parse.
+[0m12:01:57.001486 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'partial_parser', 'label': '12e2e146-43be-4486-93a2-a5da103e2ecc', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x10a0c6490>]}
+[0m12:01:57.540928 [warn ] [MainThread]: [[33mWARNING[0m]: Deprecated functionality
+The `tests` config has been renamed to `data_tests`. Please see
+https://docs.getdbt.com/docs/build/data-tests#new-data_tests-syntax for more
+information.
+[0m12:01:57.541649 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'deprecation', 'label': '12e2e146-43be-4486-93a2-a5da103e2ecc', 'property_': 'warn', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x10a725fd0>]}
+[0m12:01:57.647314 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'load_project', 'label': '12e2e146-43be-4486-93a2-a5da103e2ecc', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x10aaf2130>]}
+[0m12:01:57.732203 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'resource_counts', 'label': '12e2e146-43be-4486-93a2-a5da103e2ecc', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x10a8dab80>]}
+[0m12:01:57.732816 [info ] [MainThread]: Found 3 models, 2 data tests, 3 sources, 432 macros
+[0m12:01:57.733274 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'runnable_timing', 'label': '12e2e146-43be-4486-93a2-a5da103e2ecc', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x10aab8460>]}
+[0m12:01:57.734083 [info ] [MainThread]: 
+[0m12:01:57.734609 [debug] [MainThread]: Acquiring new postgres connection 'master'
+[0m12:01:57.735292 [debug] [ThreadPool]: Acquiring new postgres connection 'list_dummy_public_stg'
+[0m12:01:57.740411 [debug] [ThreadPool]: Acquiring new postgres connection 'list_dummy_public_marts'
+[0m12:01:57.741674 [debug] [ThreadPool]: Acquiring new postgres connection 'list_dummy_public_raw'
+[0m12:01:57.775131 [debug] [ThreadPool]: Using postgres connection "list_dummy_public_stg"
+[0m12:01:57.775646 [debug] [ThreadPool]: Using postgres connection "list_dummy_public_marts"
+[0m12:01:57.776105 [debug] [ThreadPool]: Using postgres connection "list_dummy_public_raw"
+[0m12:01:57.776486 [debug] [ThreadPool]: On list_dummy_public_stg: BEGIN
+[0m12:01:57.776953 [debug] [ThreadPool]: On list_dummy_public_marts: BEGIN
+[0m12:01:57.777367 [debug] [ThreadPool]: On list_dummy_public_raw: BEGIN
+[0m12:01:57.777743 [debug] [ThreadPool]: Opening a new connection, currently in state init
+[0m12:01:57.778123 [debug] [ThreadPool]: Opening a new connection, currently in state init
+[0m12:01:57.778518 [debug] [ThreadPool]: Opening a new connection, currently in state init
+[0m12:01:57.780055 [debug] [ThreadPool]: Postgres adapter: Got a retryable error when attempting to open a postgres connection.
+1 attempts remaining. Retrying in 0 seconds.
+Error:
+connection to server at "localhost" (::1), port 5432 failed: Operation not permitted
+	Is the server running on that host and accepting TCP/IP connections?
+connection to server at "localhost" (127.0.0.1), port 5432 failed: Operation not permitted
+	Is the server running on that host and accepting TCP/IP connections?
+
+[0m12:01:57.780531 [debug] [ThreadPool]: Postgres adapter: Got a retryable error when attempting to open a postgres connection.
+1 attempts remaining. Retrying in 0 seconds.
+Error:
+connection to server at "localhost" (::1), port 5432 failed: Operation not permitted
+	Is the server running on that host and accepting TCP/IP connections?
+connection to server at "localhost" (127.0.0.1), port 5432 failed: Operation not permitted
+	Is the server running on that host and accepting TCP/IP connections?
+
+[0m12:01:57.780963 [debug] [ThreadPool]: Postgres adapter: Got a retryable error when attempting to open a postgres connection.
+1 attempts remaining. Retrying in 0 seconds.
+Error:
+connection to server at "localhost" (::1), port 5432 failed: Operation not permitted
+	Is the server running on that host and accepting TCP/IP connections?
+connection to server at "localhost" (127.0.0.1), port 5432 failed: Operation not permitted
+	Is the server running on that host and accepting TCP/IP connections?
+
+[0m12:01:57.781533 [debug] [ThreadPool]: Postgres adapter: Error running SQL: BEGIN
+[0m12:01:57.782006 [debug] [ThreadPool]: Postgres adapter: Error running SQL: BEGIN
+[0m12:01:57.782446 [debug] [ThreadPool]: Postgres adapter: Error running SQL: BEGIN
+[0m12:01:57.782855 [debug] [ThreadPool]: Postgres adapter: Rolling back transaction.
+[0m12:01:57.783249 [debug] [ThreadPool]: Postgres adapter: Rolling back transaction.
+[0m12:01:57.783658 [debug] [ThreadPool]: Postgres adapter: Rolling back transaction.
+[0m12:01:57.784082 [debug] [ThreadPool]: Postgres adapter: Error running SQL: macro list_relations_without_caching
+[0m12:01:57.784543 [debug] [ThreadPool]: Postgres adapter: Error running SQL: macro list_relations_without_caching
+[0m12:01:57.785067 [debug] [ThreadPool]: Postgres adapter: Error running SQL: macro list_relations_without_caching
+[0m12:01:57.785474 [debug] [ThreadPool]: Postgres adapter: Rolling back transaction.
+[0m12:01:57.785884 [debug] [ThreadPool]: Postgres adapter: Rolling back transaction.
+[0m12:01:57.786269 [debug] [ThreadPool]: Postgres adapter: Rolling back transaction.
+[0m12:01:57.786654 [debug] [ThreadPool]: On list_dummy_public_marts: No close available on handle
+[0m12:01:57.787073 [debug] [ThreadPool]: On list_dummy_public_raw: No close available on handle
+[0m12:01:57.787465 [debug] [ThreadPool]: On list_dummy_public_stg: No close available on handle
+[0m12:01:57.788161 [debug] [MainThread]: Connection 'master' was properly closed.
+[0m12:01:57.788572 [debug] [MainThread]: Connection 'list_dummy_public_stg' was properly closed.
+[0m12:01:57.788960 [debug] [MainThread]: Connection 'list_dummy_public_marts' was properly closed.
+[0m12:01:57.789344 [debug] [MainThread]: Connection 'list_dummy_public_raw' was properly closed.
+[0m12:01:57.789814 [error] [MainThread]: Encountered an error:
+Database Error
+  connection to server at "localhost" (::1), port 5432 failed: Operation not permitted
+  	Is the server running on that host and accepting TCP/IP connections?
+  connection to server at "localhost" (127.0.0.1), port 5432 failed: Operation not permitted
+  	Is the server running on that host and accepting TCP/IP connections?
+  
+[0m12:01:57.791518 [debug] [MainThread]: Resource report: {"command_name": "compile", "command_success": false, "command_wall_clock_time": 1.0479486, "process_in_blocks": "0", "process_kernel_time": 0.167442, "process_mem_max_rss": "128761856", "process_out_blocks": "0", "process_user_time": 1.493939}
+[0m12:01:57.792159 [debug] [MainThread]: Command `dbt compile` failed at 12:01:57.791910 after 1.05 seconds
+[0m12:01:57.792596 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'end', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x10791ea60>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x10a7bf640>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x10a7d57c0>]}
+[0m12:01:57.793020 [debug] [MainThread]: Flushing usage events
+[0m12:01:57.798124 [debug] [MainThread]: Error sending anonymous usage statistics. Disabling tracking for this execution. If you wish to permanently disable tracking, see: https://docs.getdbt.com/reference/global-configs#send-anonymous-usage-stats.
+[0m12:02:25.255408 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'start', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x10955ea60>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x10b7f6490>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x10b7f62b0>]}
+
+
+============================== 12:02:25.260124 | d837bfd0-fdc3-4c9b-ab25-c94b8c32876b ==============================
+[0m12:02:25.260124 [info ] [MainThread]: Running with dbt=1.8.9
+[0m12:02:25.260662 [debug] [MainThread]: running dbt with arguments {'printer_width': '80', 'indirect_selection': 'eager', 'write_json': 'True', 'log_cache_events': 'False', 'partial_parse': 'True', 'cache_selected_only': 'False', 'profiles_dir': '/tmp/dbt-profile', 'debug': 'False', 'warn_error': 'None', 'log_path': '/Users/gnana/Dev/Projects/ecom-reco/data/dbt/logs', 'fail_fast': 'False', 'version_check': 'True', 'use_colors': 'True', 'use_experimental_parser': 'False', 'no_print': 'None', 'quiet': 'False', 'empty': 'None', 'log_format': 'default', 'introspect': 'True', 'invocation_command': 'dbt parse --target dev', 'static_parser': 'True', 'target_path': 'None', 'warn_error_options': 'WarnErrorOptions(include=[], exclude=[])', 'send_anonymous_usage_stats': 'True'}
+[0m12:02:25.346524 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'project_id', 'label': 'd837bfd0-fdc3-4c9b-ab25-c94b8c32876b', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x10b7b00d0>]}
+[0m12:02:25.376266 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'adapter_info', 'label': 'd837bfd0-fdc3-4c9b-ab25-c94b8c32876b', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x10bb05a60>]}
+[0m12:02:25.377824 [info ] [MainThread]: Registered adapter: postgres=1.8.2
+[0m12:02:25.431490 [debug] [MainThread]: checksum: 7c9f24cadb9ed71bfad0146ef54df7f5d259c85b535c1ae4260269edc44b8995, vars: {}, profile: , target: dev, version: 1.8.9
+[0m12:02:25.501580 [debug] [MainThread]: Partial parsing enabled: 0 files deleted, 0 files added, 0 files changed.
+[0m12:02:25.502115 [debug] [MainThread]: Partial parsing enabled, no changes found, skipping parsing
+[0m12:02:25.525718 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'load_project', 'label': 'd837bfd0-fdc3-4c9b-ab25-c94b8c32876b', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x10c37cf10>]}
+[0m12:02:25.527840 [info ] [MainThread]: Performance info: /Users/gnana/Dev/Projects/ecom-reco/data/dbt/target/perf_info.json
+[0m12:02:25.593526 [debug] [MainThread]: Resource report: {"command_name": "parse", "command_success": true, "command_wall_clock_time": 0.3712835, "process_in_blocks": "0", "process_kernel_time": 0.12838, "process_mem_max_rss": "113623040", "process_out_blocks": "0", "process_user_time": 0.918823}
+[0m12:02:25.594370 [debug] [MainThread]: Command `dbt parse` succeeded at 12:02:25.594108 after 0.37 seconds
+[0m12:02:25.594800 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'end', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x10955ea60>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x1099b7b20>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x10c344910>]}
+[0m12:02:25.595282 [debug] [MainThread]: Flushing usage events
+[0m12:02:25.600714 [debug] [MainThread]: Error sending anonymous usage statistics. Disabling tracking for this execution. If you wish to permanently disable tracking, see: https://docs.getdbt.com/reference/global-configs#send-anonymous-usage-stats.

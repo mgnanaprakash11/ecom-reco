@@ -42,23 +42,24 @@ combined as (
     on o.data_upload_batch_id = b.data_upload_batch_id
     and o.tenant_id = b.tenant_id
 ),
-placeholder as (
-  select
-    cast(null as uuid) as data_upload_batch_id,
-    cast(null as uuid) as tenant_id,
-    0 as rows_loaded,
-    0 as reported_row_count,
-    'noop'::text as status,
-    cast(null as timestamptz) as processing_started_at,
-    cast(null as timestamptz) as processing_completed_at,
-    cast(null as timestamptz) as last_row_created_at,
-    current_timestamp as processed_at,
-    '{{ invocation_id }}'::text as dbt_invocation_id,
-    'dbt-placeholder'::text as triggered_by
-  where not exists (select 1 from combined)
+combined_stats as (
+  select count(*) as row_count
+  from combined
 )
 select *
 from combined
 union all
-select *
-from placeholder;
+select
+  cast(null as uuid) as data_upload_batch_id,
+  cast(null as uuid) as tenant_id,
+  0 as rows_loaded,
+  0 as reported_row_count,
+  'noop'::text as status,
+  cast(null as timestamptz) as processing_started_at,
+  cast(null as timestamptz) as processing_completed_at,
+  cast(null as timestamptz) as last_row_created_at,
+  current_timestamp as processed_at,
+  '{{ invocation_id }}'::text as dbt_invocation_id,
+  'dbt-placeholder'::text as triggered_by
+from combined_stats
+where row_count = 0;
