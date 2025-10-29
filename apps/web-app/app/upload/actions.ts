@@ -1,10 +1,13 @@
 "use server";
 
 import { createHash, randomUUID } from "crypto";
-import { tasks } from "@trigger.dev/sdk";
 import { createClient as createSupabaseAuthClient } from "@/lib/supabase/server";
 import { db, eq, schema } from "@repo/db";
 import { createClient as createSupabaseServiceClient } from "@supabase/supabase-js";
+import { start } from "workflow/api";
+
+import { processOrdersWorkflow } from "@/app/workflows/process-orders";
+import type { OrdersUploadPayload } from "@/lib/workflows/process-orders-upload";
 
 const STORAGE_BUCKET = "reco-uploads";
 
@@ -15,11 +18,18 @@ export type UploadState = {
 };
 
 function createServiceRoleClient() {
-  const url = process.env.SUPABASE_URL;
-  const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+  const url =
+    process.env.SUPABASE_URL ?? process.env.NEXT_PUBLIC_SUPABASE_URL ?? "";
+  const serviceKey =
+    process.env.SUPABASE_SECRET_KEY ??
+    process.env.SUPABASE_SECRET_OR_SERVICE_ROLE_KEY ??
+    process.env.SUPABASE_SERVICE_ROLE_KEY ??
+    "";
 
   if (!url || !serviceKey) {
-    throw new Error("Supabase service role credentials are not configured.");
+    throw new Error(
+      "Supabase service role credentials are not configured. Set SUPABASE_URL (or NEXT_PUBLIC_SUPABASE_URL) and SUPABASE_SECRET_KEY.",
+    );
   }
 
   return createSupabaseServiceClient(url, serviceKey, {
@@ -59,7 +69,7 @@ export async function uploadOrdersCsv(
     if (!membership) {
       return {
         status: "error",
-        message: "No tenant membership found for your account. Complete onboarding first.",
+        message: "No tenant membership found for your account. Contact an administrator to be granted access.",
       };
     }
 
@@ -89,8 +99,8 @@ export async function uploadOrdersCsv(
     const notesValue = formData.get("notes");
     const notes = typeof notesValue === "string" && notesValue.trim().length > 0 ? notesValue.trim() : null;
 
-    const fileArrayBuffer = await file.arrayBuffer();
-    const fileBuffer = Buffer.from(fileArrayBuffer);
+    // Convert file to buffer once to avoid ArrayBuffer detachment issues
+    const fileBuffer = Buffer.from(await file.arrayBuffer());
     const checksum = createHash("sha256").update(fileBuffer).digest("hex");
 
     const timestamp = new Date().toISOString().replace(/[:.]/g, "-");
@@ -101,7 +111,7 @@ export async function uploadOrdersCsv(
 
     const { error: uploadError } = await serviceClient.storage
       .from(STORAGE_BUCKET)
-      .upload(objectPath, fileArrayBuffer, {
+      .upload(objectPath, fileBuffer, {
         cacheControl: "3600",
         contentType: file.type || "text/csv",
         upsert: false,
@@ -140,30 +150,37 @@ export async function uploadOrdersCsv(
         createdBy: user.id,
       });
 
-    try {
-      await tasks.trigger("process-orders-upload", {
-        tenantId: membership.tenantId,
-        dataUploadBatchId: batchId,
-        bucket: STORAGE_BUCKET,
-        filePath: objectPath,
-        fileName: file.name,
-      });
-    } catch (triggerError) {
-      console.error("[uploadOrdersCsv] failed to schedule trigger", triggerError);
+    const payload: OrdersUploadPayload = {
+      tenantId: membership.tenantId,
+      dataUploadBatchId: batchId,
+      bucket: STORAGE_BUCKET,
+      filePath: objectPath,
+      fileName: file.name,
+      fileBase64:
+        !process.env.VERCEL && process.env.NODE_ENV !== "production"
+          ? fileBuffer.toString("base64")
+          : undefined,
+    };
 
-      const triggerMessage =
-        triggerError instanceof Error && triggerError.message
-          ? triggerError.message
-          : "Trigger scheduling failed";
+    try {
+      await start(processOrdersWorkflow, [payload]);
+    } catch (workflowError) {
+      console.error("[uploadOrdersCsv] failed to process/orders workflow", workflowError);
+
+      const workflowMessage =
+        workflowError instanceof Error && workflowError.message
+          ? workflowError.message
+          : "Workflow processing failed";
 
       await db
         .update(schema.dataUploadBatches)
-        .set({ status: "failed", notes: triggerMessage })
+        .set({ status: "failed", notes: workflowMessage })
         .where(eq(schema.dataUploadBatches.id, batchId));
 
       return {
         status: "error",
-        message: "Upload saved but background processing failed to start. Please retry.",
+        message:
+          "Upload saved but processing failed. Check server logs for details and retry.",
       };
     }
 
@@ -177,7 +194,8 @@ export async function uploadOrdersCsv(
     if (error instanceof Error && error.message.includes("Supabase service role credentials")) {
       return {
         status: "error",
-        message: "Upload service is misconfigured. Contact support to set SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY.",
+        message:
+          "Upload service is misconfigured. Contact support to set SUPABASE_URL and SUPABASE_SECRET_KEY.",
       };
     }
 

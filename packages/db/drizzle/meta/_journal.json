@@ -43,6 +43,13 @@
       "when": 1759064692367,
       "tag": "0005_easy_rogue",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1761646806570,
+      "tag": "0006_petite_ted_forrester",
+      "breakpoints": true
     }
   ]
 }

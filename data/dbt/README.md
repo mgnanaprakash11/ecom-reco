@@ -79,10 +79,9 @@ The default materialisation is `view`, with overrides where persistence is requi
 - Reset the environment with `dbt clean` if you change dependencies or switch databases.
 
 ## CI Integration
-Trigger.dev dispatches the GitHub Actions workflow (`.github/workflows/run-dbt.yml`) after CSV ingestion completes. The workflow sets the same environment variables and invokes `dbt build`. Ensure the following secrets exist in GitHub:
+Vercel Workflows dispatch the GitHub Actions workflow (`.github/workflows/run-dbt.yml`) after CSV ingestion completes. The workflow sets the same environment variables and invokes `dbt build`. Ensure the following secrets exist in GitHub:
 - `DBT_HOST`, `DBT_PORT`, `DBT_DATABASE`, `DBT_USER`, `DBT_PASSWORD`, `DBT_SCHEMA`
 - `DATABASE_URL` (for auxiliary scripts)
 - `SUPABASE_SERVICE_ROLE_KEY`
 
 Successful runs update `data_upload_batches.metadata.githubWorkflow` with the Actions run URL for traceability.
-

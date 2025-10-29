@@ -1,6 +1,6 @@
 # Ecom Reco Monorepo
 
-A Turborepo workspace powering the multi-tenant reconciliation platform for Indian marketplaces. It combines two Next.js surfaces, a shared Drizzle/Postgres data layer, Trigger.dev automations, and reusable UI packages for rapid agent onboarding.
+A Turborepo workspace powering the multi-tenant reconciliation platform for Indian marketplaces. It combines two Next.js surfaces, a shared Drizzle/Postgres data layer, Vercel Workflows automations, and reusable UI packages for rapid agent onboarding.
 
 ## Repository Structure
 
@@ -10,13 +10,15 @@ apps/
   docs/         # Contributor handbook + onboarding guides (Next.js, port 3001)
 packages/
   db/           # Drizzle schema, client, and SQL migrations (Postgres)
-  tasks/        # Trigger.dev tasks (process uploads, background jobs)
   ui/           # Shared component library (shadcn/ui)
   supabase/     # Supabase browser/server helpers
   eslint-config & typescript-config/  # Workspace presets
+apps/web-app/
+  app/workflows/   # Vercel Workflow definitions
+  lib/workflows/   # Shared ingestion helpers used by Workflows
 ```
 
-Workspace-level coordinators live at `pnpm-workspace.yaml`, `turbo.json`, and `trigger.config.ts`.
+Workspace-level coordinators live at `pnpm-workspace.yaml` and `turbo.json`.
 
 ## Environment Setup
 
@@ -32,7 +34,7 @@ Workspace-level coordinators live at `pnpm-workspace.yaml`, `turbo.json`, and `t
    SUPABASE_URL=https://...
    SUPABASE_SERVICE_ROLE_KEY=...
    ```
-   These variables are required by the upload API, Supabase storage, and Trigger.dev worker.
+  These variables are required by the upload API, Supabase storage, and Vercel Workflows.
 
 ## Running Locally
 
@@ -41,10 +43,6 @@ Workspace-level coordinators live at `pnpm-workspace.yaml`, `turbo.json`, and `t
   pnpm dev
   ```
   or focus on one surface: `pnpm --filter web-app dev`, `pnpm --filter docs dev`.
-- Start the Trigger.dev worker (requires env vars above):
-  ```sh
-  pnpm --filter @repo/tasks dev
-  ```
 - Common quality gates:
   ```sh
   pnpm lint
@@ -52,20 +50,22 @@ Workspace-level coordinators live at `pnpm-workspace.yaml`, `turbo.json`, and `t
   pnpm format
   ```
 
+Background ingestion runs through Vercel Workflows; once deployed, uploads enqueue the workflow automatically. For local dry-runs you can invoke the workflow handler via unit tests or by calling the `workflow/api` `start` helper inside scripts.
+
 ## Upload & Reconciliation Pipeline
 
 1. Authenticated users visit `/upload` and submit marketplace CSV exports.
-2. The server action saves the file to the Supabase `reco-uploads` bucket, records a `data_upload_batches` row, and triggers `process-orders-upload` via Trigger.dev.
-3. The task downloads the CSV, parses it, writes each row into the `raw.orders` table (JSONB payload per row), and—on success—dispatches the GitHub Actions dbt workflow to continue processing (`received → parsing → loaded → processing`).
+2. The server action saves the file to the Supabase `reco-uploads` bucket, records a `data_upload_batches` row, and enqueues `process-orders-workflow` via Vercel Workflows.
+3. The workflow downloads the CSV, parses it, writes each row into the `raw.orders` table (JSONB payload per row) and the structured `raw.shopify_orders` table, and—on success—dispatches the GitHub Actions dbt workflow to continue processing (`received → parsing → loaded → processing`).
 
 Use the Supabase dashboard or Drizzle Studio (`pnpm --filter @repo/db run studio`) to inspect uploads and raw data.
 
 ## GitHub Actions dbt Workflow
 
 - Workflow file: `.github/workflows/run-dbt.yml`. It runs `dbt run --select raw_orders+` (and tests) on demand via `workflow_dispatch`.
-- Trigger.dev dispatches the workflow automatically once a batch lands in `raw.orders`. You can also run it manually from the Actions tab.
+- The Vercel workflow dispatches the job automatically once a batch finishes loading into the raw schema. You can also run it manually from the Actions tab.
 - Required repository secrets: `DBT_HOST`, `DBT_PORT`, `DBT_DATABASE`, `DBT_USER`, `DBT_PASSWORD`, `DBT_SCHEMA`, `DATABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`.
-- Worker environment variables: `GITHUB_REPOSITORY` (`owner/repo`), `GITHUB_ACTIONS_TOKEN` (PAT with `workflow` scope), optional `GITHUB_DBT_WORKFLOW` (defaults to `run-dbt.yml`) and `GITHUB_DBT_WORKFLOW_REF` (defaults to `main`).
+- Workflow environment variables: `GITHUB_REPOSITORY` (`owner/repo`), `GITHUB_ACTIONS_TOKEN` (PAT with `workflow` scope), optional `GITHUB_DBT_WORKFLOW` (defaults to `run-dbt.yml`) and `GITHUB_DBT_WORKFLOW_REF` (defaults to `main`).
 - Successful dispatch updates `data_upload_batches.metadata.githubWorkflow`; watch the GitHub Actions run logs for dbt output and lint/test results.
 
 ## Database & Migrations
@@ -86,7 +86,7 @@ Use the Supabase dashboard or Drizzle Studio (`pnpm --filter @repo/db run studio
 ## Troubleshooting Checklist
 
 - Upload failures usually stem from missing env vars or Supabase bucket permissions—confirm the `reco-uploads` bucket exists and service-role key is present.
-- Trigger.dev worker requires a logged-in CLI session (`pnpm dlx trigger.dev@latest login`) and the same env variables as the web app.
+- Verify that the Vercel project has the workflow integration enabled and that environment variables match the local `.env` when running uploads.
 - If Turbopack cannot resolve `@repo/*`, ensure `pnpm install` completed and the target package is listed under the consuming app’s dependencies.
 
 Happy reconciling!

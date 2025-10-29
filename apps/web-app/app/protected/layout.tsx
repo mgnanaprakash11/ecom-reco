@@ -27,10 +27,7 @@ export default async function ProtectedLayout({
     columns: { tenantId: true },
     where: (tenantMembers, { eq }) => eq(tenantMembers.userId, user.id),
   });
-
-  if (!membership) {
-    redirect("/onboarding");
-  }
+  const hasTenantAccess = Boolean(membership);
 
   return (
     <main className="min-h-screen flex flex-col items-center">
@@ -47,7 +44,18 @@ export default async function ProtectedLayout({
           </div>
         </nav>
         <div className="flex-1 flex flex-col gap-20 max-w-5xl p-5">
-          {children}
+          {hasTenantAccess ? (
+            children
+          ) : (
+            <div className="rounded-md border border-dashed border-muted-foreground/20 bg-muted/30 p-6 text-sm text-muted-foreground">
+              <h2 className="text-xl font-semibold text-foreground">Tenant access required</h2>
+              <p className="mt-2">
+                Your profile has not been assigned to a reconciliation tenant yet. Please reach out
+                to an administrator to request access. Once your membership is provisioned you can
+                return here to view protected content.
+              </p>
+            </div>
+          )}
         </div>
 
         <footer className="w-full flex items-center justify-center border-t mx-auto text-center text-xs gap-8 py-16">

@@ -1,0 +1,21 @@
+version: 2
+
+models:
+  - name: stg_shopify_orders
+    description: "Typed representation of raw Shopify order uploads scoped per tenant, preserving row-level granularity."
+    columns:
+      - name: id
+        description: "Surrogate UUID for the raw.shopify_orders record."
+        tests:
+          - not_null
+          - unique
+      - name: tenant_id
+        description: "Tenant that owns the uploaded data."
+        tests:
+          - not_null
+      - name: shopify_order_id
+        description: "Original Shopify order identifier."
+      - name: data_upload_batch_id
+        description: "Batch identifier that triggered the ingestion."
+        tests:
+          - not_null

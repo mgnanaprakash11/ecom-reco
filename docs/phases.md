@@ -8,20 +8,20 @@ Here’s a phase-by-phase roadmap you can follow; each phase builds on the previ
   tenant_id.
   - Set up local/dev/prod environments (Vercel preview + Supabase projects). Create .env.template, pnpm scripts (pnpm env:pull), and secrets management
   docs.
-  - Establish Trigger.dev project, queues, and retries; define naming conventions for tasks (e.g., ingest.csv.<source>).
-  - Introduce observability primitives: structured logging (Pino), Trigger.dev run metadata table, and baseline dashboards in Logflare or Supabase logs.
+  - Enable Vercel Workflows integration, define workflow naming conventions (e.g., ingest.csv.<source>), and map environment secrets between Vercel and Supabase.
+  - Introduce observability primitives: structured logging (Pino), workflow run metadata table, and baseline dashboards in Logflare or Supabase logs.
   - Deliverables: ERD draft, RLS-tested seed data, running Next.js shell with protected routes, CI pipeline for lint/type-check, onboarding checklist.
 
   Phase 1 – Data Ingestion & Validation
 
   - Build CSV upload UI (multipart → Supabase Storage), storing metadata (tenant_id, file hash, schema version) in raw.uploads.
-  - Implement Trigger.dev ingestion flow: validate headers, detect delimiter/encoding, enforce size limits, quarantine bad files, and emit status updates
-  to raw.upload_runs.
+  - Implement the ingestion workflow: validate headers, detect delimiter/encoding, enforce size limits, quarantine bad files, and emit status updates to
+  raw.upload_runs.
   - Load rows into raw.<domain> tables as JSONB blobs alongside arrival timestamps and pointer to storage object. Use Drizzle for metadata tables; bulk
   inserts via pg COPY for row payloads.
   - Configure dbt project skeleton: profiles, model folders (models/raw, models/staging, models/marts), base seeds for reference data (platforms,
   commission types).
-  - Automate dbt runs after each successful ingestion (Trigger.dev job or GitHub Action) and persist run outcomes.
+  - Automate dbt runs after each successful ingestion (Vercel Workflow step or GitHub Action) and persist run outcomes.
   - Deliverables: repeatable ingestion for at least one platform (e.g., Amazon), automated validation errors surfaced to UI/Slack, dbt debug run completing
   end-to-end.
 
@@ -39,8 +39,8 @@ Here’s a phase-by-phase roadmap you can follow; each phase builds on the previ
   version rules with effective dates.
   - Implement core reconciliation procedures in Postgres (CTEs/materialized views for matching payouts to orders, tax reconciliation, commission recalcs).
   Optimize with indexes/partitioning by tenant/month.
-  - Orchestrate via Trigger.dev: job scheduler reading pending batches, invoking Postgres stored procedures, capturing metrics, and marking recon_runs with
-  statuses (pending, running, matched, exceptions).
+  - Orchestrate via Vercel Workflows or a queue service: job scheduler reading pending batches, invoking Postgres stored procedures, capturing metrics, and
+  marking recon_runs with statuses (pending, running, matched, exceptions).
   - Handle exceptions: persist mismatches in recon_exceptions with foreign keys back to raw + staging rows; include diff payloads for UI.
   - Deliverables: deterministic reconciliation for first platform, automated reruns on rule updates, audit trail per run, initial KPI outputs (match rate,
   variance amount).
@@ -48,11 +48,11 @@ Here’s a phase-by-phase roadmap you can follow; each phase builds on the previ
   Phase 4 – Workflow, Alerts, & External Integrations
 
   - Build notification pathways: Slack/webhooks/email for failed ingestions, recon exceptions breaching thresholds, or rule version changes.
-  - Add approval workflow tables (e.g., finance teams marking an exception “accepted” or “requires vendor follow-up”). Trigger.dev tasks should update
+  - Add approval workflow tables (e.g., finance teams marking an exception “accepted” or “requires vendor follow-up”). Background workflows should update
   statuses and notify stakeholders.
   - Integrate optional external data sources (payment gateways, GST filings) via API fetchers to enrich reconciliation, caching responses in
   external_cache.
-  - Implement SLA monitoring and run-time budgeting (Trigger.dev concurrency controls, Postgres resource groups, backpressure for large tenants).
+  - Implement SLA monitoring and run-time budgeting (workflow concurrency controls, Postgres resource groups, backpressure for large tenants).
   - Deliverables: end-to-end alerting tested, configurable SLA thresholds per tenant, exception lifecycle dashboards, documented runbook for operations.
 
   Phase 5 – Productized UI & Growth Readiness

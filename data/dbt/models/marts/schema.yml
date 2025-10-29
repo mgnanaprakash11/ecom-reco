@@ -1,0 +1,16 @@
+version: 2
+
+models:
+  - name: fct_shopify_orders
+    description: "Fact table exposing Shopify order line metrics with reconciliation-ready financial measures."
+    columns:
+      - name: tenant_id
+        description: "Tenant that owns the order."
+        tests:
+          - not_null
+      - name: shopify_order_id
+        description: "Shopify order identifier (string) used for downstream reconciliations."
+      - name: net_sales_amount
+        description: "Total order amount after factoring refunds."
+      - name: lineitem_net_amount
+        description: "Net revenue contribution for the line after discounts."

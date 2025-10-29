@@ -21,7 +21,19 @@ export default async function UploadPage() {
   });
 
   if (!membership) {
-    redirect("/onboarding");
+    return (
+      <div className="min-h-screen bg-background">
+        <div className="mx-auto flex w-full max-w-3xl flex-col gap-8 px-5 py-12">
+          <div className="rounded-md border border-dashed border-muted-foreground/20 bg-muted/30 p-6 text-sm text-muted-foreground">
+            <h1 className="text-lg font-semibold text-foreground">Tenant access required</h1>
+            <p className="mt-2">
+              Your account is not linked to a reconciliation tenant yet. Please contact an
+              administrator to be added before uploading order files.
+            </p>
+          </div>
+        </div>
+      </div>
+    );
   }
 
   const tenantPlatforms = await db
