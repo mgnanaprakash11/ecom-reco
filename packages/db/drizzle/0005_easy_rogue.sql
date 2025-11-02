@@ -1,1 +1,0 @@
-ALTER TABLE "raw"."orders_processing_logs" ALTER COLUMN "error_message" SET DEFAULT 'none';

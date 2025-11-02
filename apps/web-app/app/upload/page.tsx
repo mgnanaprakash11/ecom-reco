@@ -1,9 +1,10 @@
 import { redirect } from "next/navigation";
 
 import { createClient as createSupabaseClient } from "@/lib/supabase/server";
-import { db, eq, schema } from "@repo/db";
+import { db } from "@repo/db";
 
-import { UploadForm, type TenantPlatformOption } from "./upload-form";
+import { ORDER_UPLOADS_BUCKET } from "./actions";
+import { UploadForm } from "./upload-form";
 
 export default async function UploadPage() {
   const supabase = await createSupabaseClient();
@@ -15,50 +16,19 @@ export default async function UploadPage() {
     redirect("/auth/login");
   }
 
-  const membership = await db.query.tenantMembers.findFirst({
-    columns: { tenantId: true },
-    where: (tenantMembers, { eq }) => eq(tenantMembers.userId, user.id),
+  const recentUploads = await db.query.orderUploads.findMany({
+    where: (uploads, { eq }) => eq(uploads.userId, user.id),
+    orderBy: (uploads, { desc }) => desc(uploads.createdAt),
+    limit: 10,
   });
 
-  if (!membership) {
-    return (
-      <div className="min-h-screen bg-background">
-        <div className="mx-auto flex w-full max-w-3xl flex-col gap-8 px-5 py-12">
-          <div className="rounded-md border border-dashed border-muted-foreground/20 bg-muted/30 p-6 text-sm text-muted-foreground">
-            <h1 className="text-lg font-semibold text-foreground">Tenant access required</h1>
-            <p className="mt-2">
-              Your account is not linked to a reconciliation tenant yet. Please contact an
-              administrator to be added before uploading order files.
-            </p>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  const tenantPlatforms = await db
-    .select({
-      id: schema.tenantPlatforms.id,
-      displayName: schema.tenantPlatforms.displayName,
-      sellerIdentifier: schema.tenantPlatforms.sellerIdentifier,
-      platformName: schema.platforms.name,
-    })
-    .from(schema.tenantPlatforms)
-    .innerJoin(
-      schema.platforms,
-      eq(schema.platforms.id, schema.tenantPlatforms.platformId),
-    )
-    .where(eq(schema.tenantPlatforms.tenantId, membership.tenantId));
-
-  const platformOptions: TenantPlatformOption[] = tenantPlatforms.map((platform) => ({
-    id: platform.id,
-    label:
-      platform.displayName ??
-      platform.platformName ??
-      platform.sellerIdentifier ??
-      "Unnamed platform",
-    helper: platform.sellerIdentifier ?? platform.platformName ?? undefined,
-  }));
+  const timestampFormatter = new Intl.DateTimeFormat("en-US", {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+  });
 
   return (
     <div className="min-h-screen bg-background">
@@ -66,12 +36,46 @@ export default async function UploadPage() {
         <div className="flex flex-col gap-1">
           <h1 className="text-3xl font-semibold tracking-tight">Order Uploads</h1>
           <p className="text-sm text-muted-foreground">
-            Submit order CSV files for reconciliation. Files are stored in the Supabase
-            <code className="ml-1 rounded bg-muted px-1.5 py-0.5 text-xs">reco-uploads</code> bucket
-            and logged for processing.
+            Submit Shopify order CSV exports. Files are stored in the Supabase
+            <code className="ml-1 rounded bg-muted px-1.5 py-0.5 text-xs">{ORDER_UPLOADS_BUCKET}</code>{" "}
+            bucket and tracked for reconciliation.
           </p>
         </div>
-        <UploadForm tenantPlatforms={platformOptions} />
+        <UploadForm />
+        {recentUploads.length > 0 ? (
+          <div className="rounded-lg border border-border bg-card">
+            <div className="border-b border-border px-5 py-3">
+              <h2 className="text-sm font-medium text-muted-foreground">
+                Recent uploads ({recentUploads.length})
+              </h2>
+            </div>
+            <ul className="divide-y divide-border">
+              {recentUploads.map((upload) => (
+                <li key={upload.id} className="flex flex-col gap-1 px-5 py-3 text-sm">
+                  <div className="flex flex-wrap items-center justify-between gap-2">
+                    <span className="font-medium text-foreground">{upload.fileName}</span>
+                    <span className="text-xs uppercase tracking-wide text-muted-foreground">
+                      {upload.status}
+                    </span>
+                  </div>
+                  <div className="flex flex-wrap items-center gap-3 text-xs text-muted-foreground">
+                    <span>
+                      {upload.createdAt
+                        ? timestampFormatter.format(upload.createdAt)
+                        : "Pending"}
+                    </span>
+                    {upload.storeName ? <span>Store: {upload.storeName}</span> : null}
+                    {upload.notes ? <span className="truncate">Notes: {upload.notes}</span> : null}
+                  </div>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ) : (
+          <div className="rounded-lg border border-dashed border-border/70 bg-muted/30 p-5 text-sm text-muted-foreground">
+            <p>No uploads yet. Start by submitting your first Shopify order export.</p>
+          </div>
+        )}
       </div>
     </div>
   );

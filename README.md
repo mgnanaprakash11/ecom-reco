@@ -1,92 +1,93 @@
-# Ecom Reco Monorepo
+# Shopify Order Upload Portal
 
-A Turborepo workspace powering the multi-tenant reconciliation platform for Indian marketplaces. It combines two Next.js surfaces, a shared Drizzle/Postgres data layer, Vercel Workflows automations, and reusable UI packages for rapid agent onboarding.
+A minimal Supabase + Next.js workspace focused on two capabilities:
 
-## Repository Structure
+1. Authenticate merchants through Supabase Auth.
+2. Upload Shopify order CSV exports into Supabase Storage while recording metadata in Postgres.
+
+The repository uses pnpm workspaces and Turborepo to share configuration and Drizzle ORM types across packages.
+
+## Directory Layout
 
 ```
 apps/
-  web-app/      # Customer-facing reconciliation UI (Next.js, port 3000)
-  docs/         # Contributor handbook + onboarding guides (Next.js, port 3001)
+  web-app/   # Next.js application (auth flows + /upload UI)
 packages/
-  db/           # Drizzle schema, client, and SQL migrations (Postgres)
-  ui/           # Shared component library (shadcn/ui)
-  supabase/     # Supabase browser/server helpers
+  db/        # Drizzle client + schema (order_uploads table)
+  supabase/  # Supabase helpers reused by the app
+  ui/        # Shared shadcn/ui components
   eslint-config & typescript-config/  # Workspace presets
-apps/web-app/
-  app/workflows/   # Vercel Workflow definitions
-  lib/workflows/   # Shared ingestion helpers used by Workflows
 ```
 
-Workspace-level coordinators live at `pnpm-workspace.yaml` and `turbo.json`.
-
-## Environment Setup
+## Getting Started
 
 1. Install dependencies (Node 18+, pnpm 9):
    ```sh
    pnpm install
    ```
-2. Populate `.env.local` / `.env` with:
+2. Copy environment variables and fill in your Supabase and Postgres details:
    ```sh
-   DATABASE_URL=postgres://...
-   NEXT_PUBLIC_SUPABASE_URL=https://...
-   NEXT_PUBLIC_SUPABASE_ANON_KEY=...
-   SUPABASE_URL=https://...
-   SUPABASE_SERVICE_ROLE_KEY=...
+   cp apps/web-app/.env.example apps/web-app/.env.local
    ```
-  These variables are required by the upload API, Supabase storage, and Vercel Workflows.
+3. Start the Next.js app:
+   ```sh
+   pnpm --filter web-app dev
+   ```
 
-## Running Locally
+The web app runs on [http://localhost:3000](http://localhost:3000) with Supabase Auth-powered login/signup flows. After signing in, visit `/upload` to submit Shopify CSV files.
 
-- Run both Next.js apps:
-  ```sh
-  pnpm dev
-  ```
-  or focus on one surface: `pnpm --filter web-app dev`, `pnpm --filter docs dev`.
-- Common quality gates:
-  ```sh
-  pnpm lint
-  pnpm check-types
-  pnpm format
-  ```
+## Environment Variables
 
-Background ingestion runs through Vercel Workflows; once deployed, uploads enqueue the workflow automatically. For local dry-runs you can invoke the workflow handler via unit tests or by calling the `workflow/api` `start` helper inside scripts.
+`apps/web-app/.env.example` documents the required variables. At a minimum you need:
 
-## Upload & Reconciliation Pipeline
+- `NEXT_PUBLIC_SUPABASE_URL`
+- `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_OR_ANON_KEY`
+- `SUPABASE_SERVICE_ROLE_KEY`
+- `DATABASE_URL`
+- Optionally override `NEXT_PUBLIC_SUPABASE_UPLOADS_BUCKET` (defaults to `order-uploads`)
 
-1. Authenticated users visit `/upload` and submit marketplace CSV exports.
-2. The server action saves the file to the Supabase `reco-uploads` bucket, records a `data_upload_batches` row, and enqueues `process-orders-workflow` via Vercel Workflows.
-3. The workflow downloads the CSV, parses it, writes each row into the `raw.orders` table (JSONB payload per row) and the structured `raw.shopify_orders` table, and—on success—dispatches the GitHub Actions dbt workflow to continue processing (`received → parsing → loaded → processing`).
+Create the bucket inside Supabase Storage before testing uploads.
 
-Use the Supabase dashboard or Drizzle Studio (`pnpm --filter @repo/db run studio`) to inspect uploads and raw data.
+## Database Schema
 
-## GitHub Actions dbt Workflow
+`packages/db/src/schema/uploads.ts` defines the single `order_uploads` table:
 
-- Workflow file: `.github/workflows/run-dbt.yml`. It runs `dbt run --select raw_orders+` (and tests) on demand via `workflow_dispatch`.
-- The Vercel workflow dispatches the job automatically once a batch finishes loading into the raw schema. You can also run it manually from the Actions tab.
-- Required repository secrets: `DBT_HOST`, `DBT_PORT`, `DBT_DATABASE`, `DBT_USER`, `DBT_PASSWORD`, `DBT_SCHEMA`, `DATABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`.
-- Workflow environment variables: `GITHUB_REPOSITORY` (`owner/repo`), `GITHUB_ACTIONS_TOKEN` (PAT with `workflow` scope), optional `GITHUB_DBT_WORKFLOW` (defaults to `run-dbt.yml`) and `GITHUB_DBT_WORKFLOW_REF` (defaults to `main`).
-- Successful dispatch updates `data_upload_batches.metadata.githubWorkflow`; watch the GitHub Actions run logs for dbt output and lint/test results.
+| Column | Description |
+| --- | --- |
+| `id` | UUID primary key |
+| `user_id` | Supabase Auth user responsible for the upload |
+| `store_name` | Optional identifier for the Shopify store |
+| `file_name`, `file_path`, `file_checksum` | Storage metadata |
+| `notes`, `status`, `metadata` | Additional context and bucket info |
+| `created_at` | Timestamp generated in Postgres |
 
-## Database & Migrations
+Regenerate migrations after schema changes:
 
-- Schema lives in `packages/db/src/schema`. New tables require a Drizzle migration:
-  ```sh
-  pnpm --filter @repo/db run generate
-  pnpm --filter @repo/db run push
-  ```
-- SQL output resides in `packages/db/drizzle`. Always commit the generated migration and `meta/_journal.json` updates.
+```sh
+pnpm --filter @repo/db run generate
+pnpm --filter @repo/db run push
+```
 
-## Testing & Conventions
+## Upload Flow
 
-- Tests: Vitest + React Testing Library; co-locate as `*.test.ts(x)` beside source files. Wire new suites into the upcoming `pnpm test` before merging.
-- Code style: TypeScript strict, ESM with explicit extensions, kebab-case filenames, PascalCase components, camelCase functions.
-- Commits: Conventional Commits with scopes (`feat(tasks): ...`, `fix(db): ...`). PRs should include rationale, validation commands, and screenshots for UI changes.
+1. Authenticated user submits a CSV via `/upload`.
+2. A server action verifies the session, normalises metadata, and uploads the file to the Supabase bucket (defaults to `order-uploads`).
+3. The upload metadata is stored in Postgres for auditing and downstream automation.
+4. Recent uploads render beneath the form so users can confirm receipt.
 
-## Troubleshooting Checklist
+## Development Scripts
 
-- Upload failures usually stem from missing env vars or Supabase bucket permissions—confirm the `reco-uploads` bucket exists and service-role key is present.
-- Verify that the Vercel project has the workflow integration enabled and that environment variables match the local `.env` when running uploads.
-- If Turbopack cannot resolve `@repo/*`, ensure `pnpm install` completed and the target package is listed under the consuming app’s dependencies.
+Common workspace commands:
 
-Happy reconciling!
+```sh
+pnpm dev             # Start the Next.js app
+pnpm lint            # Run eslint
+pnpm check-types     # Run TypeScript in noEmit mode
+pnpm format          # Format with Prettier
+```
+
+## Next Steps
+
+- Add background processing (Vercel Workflows, Supabase Functions, etc.) once you are ready to parse the CSVs into raw tables.
+- Extend `order_uploads` with status transitions (`processing`, `failed`, `completed`) as automation matures.
+- Build a lightweight dashboard to filter uploads by store or date.

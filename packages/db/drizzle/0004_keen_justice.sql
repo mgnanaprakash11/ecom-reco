@@ -1,1 +1,0 @@
-ALTER TABLE "raw"."orders_processing_logs" ADD COLUMN "additional_info" jsonb;

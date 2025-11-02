@@ -1,3 +1,3 @@
 export * from "./client.ts";
 export * from "./schema/index.ts";
-export { and, eq } from "drizzle-orm";
+export { and, eq, desc } from "drizzle-orm";
